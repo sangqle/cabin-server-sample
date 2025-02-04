@@ -12,7 +12,6 @@ public class HServer {
             server.use(UserRouter.getRouter());
             server.use(Middleware::logRequest);
 
-//            server.enableMetricsLogging(true);
             server.start();
         } catch (Exception ex) {
             System.out.println("Error starting server: " + ex.getMessage());

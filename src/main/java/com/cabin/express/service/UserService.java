@@ -19,11 +19,6 @@ public class UserService {
         if (userRequestDTO.getName() == null || userRequestDTO.getEmail() == null) {
             throw new IllegalArgumentException("Missing required fields: name and email");
         }
-        User existingUser = userDAO.findByEmail(userRequestDTO.getEmail());
-        if (existingUser != null) {
-            throw new IllegalArgumentException("Email already exists");
-        }
-
         User user = new User(userRequestDTO.getName(), userRequestDTO.getEmail());
         return userDAO.save(user);
     }
@@ -33,8 +28,9 @@ public class UserService {
         return users.stream().map(UserResponseDTO::new).toList();
     }
 
-    public User getUserById(int userId) {
-        return userDAO.findById(userId);
+    public UserResponseDTO findUserById(int userId) {
+        User user = userDAO.findById(userId);
+        return user != null ? new UserResponseDTO(user) : null;
     }
 
     public boolean updateUser(int userId, UserRequestDTO userRequestDTO) {
@@ -47,6 +43,11 @@ public class UserService {
         existingUser.setEmail(userRequestDTO.getEmail());
 
         return userDAO.update(existingUser);
+    }
+
+    public UserResponseDTO findByEmail(String email) {
+        User user = userDAO.findByEmail(email);
+        return user != null ? new UserResponseDTO(user) : null;
     }
 
     public boolean deleteUser(int userId) {
