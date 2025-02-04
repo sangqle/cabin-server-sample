@@ -1,6 +1,7 @@
 package com.cabin.express.handler;
 
 import com.cabin.express.dao.UserDAO;
+import com.cabin.express.dto.UserDTO;
 import com.cabin.express.entity.User;
 import com.cabin.express.http.Request;
 import com.cabin.express.http.Response;
@@ -32,10 +33,26 @@ public class AppHandler {
     public static void addUser(Request req, Response resp) {
         try {
             UserDAO userDAO = new UserDAO();
-            User user = req.getBodyAs(User.class);
-            userDAO.insertUser(user);
+            UserDTO userDTO = req.getBodyAs(UserDTO.class);
+            if (userDTO == null || userDTO.getName() == null || userDTO.getEmail() == null) {
+                resp.setStatusCode(400);
+                resp.writeBody("{\"error\": \"Missing required fields: name and email\"}");
+                resp.send();
+                return;
+            }
+            User user = new User(userDTO.getName(), userDTO.getEmail());
+            boolean success = userDAO.insertUser(user);
+            if (success) {
+                resp.setStatusCode(201);
+                resp.writeBody("{\"message\": \"User created successfully\"}");
+            } else {
+                resp.setStatusCode(500);
+                resp.writeBody("{\"error\": \"Failed to insert user\"}");
+            }
         } catch (Exception e) {
             e.printStackTrace();
+            resp.setStatusCode(500);
+            resp.writeBody("{\"error\": \"Error processing request\"}");
         }
         resp.send();
     }
