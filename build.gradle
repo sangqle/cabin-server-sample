@@ -1,0 +1,20 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.cabin.express'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation(files('libs/cabin-1.0.1.jar'))
+}
+
+test {
+    useJUnitPlatform()
+}
