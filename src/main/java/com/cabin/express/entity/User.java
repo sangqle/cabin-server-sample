@@ -32,6 +32,8 @@ public class User {
     @Column(columnDefinition = "DATETIME(3)")
     private LocalDateTime updatedAt;
 
+    public User() {}
+
     public User(String name, String email) {
         this.name = name;
         this.email = email;

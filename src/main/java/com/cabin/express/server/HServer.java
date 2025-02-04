@@ -1,7 +1,7 @@
 package com.cabin.express.server;
 
 import com.cabin.express.middleware.Middleware;
-import com.cabin.express.router.AppRouter;
+import com.cabin.express.router.UserRouter;
 
 public class HServer {
     public static void setupAndStartServer() {
@@ -9,7 +9,7 @@ public class HServer {
             CabinServer server = new ServerBuilder().setMaxPoolSize(200).setDefaultPoolSize(10).build();
 
             // Setup routes
-            server.use(AppRouter.getRouter());
+            server.use(UserRouter.getRouter());
             server.use(Middleware::logRequest);
 
 //            server.enableMetricsLogging(true);

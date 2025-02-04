@@ -1,14 +1,14 @@
 package com.cabin.express.router;
 
 
-import com.cabin.express.handler.AppHandler;
+import com.cabin.express.handler.UserHandler;
 
-public class AppRouter {
+public class UserRouter {
 
     private static final Router router = new Router();
     private static final String PREFIX = "/api";
 
-    private AppRouter() {
+    private UserRouter() {
     }
 
     public static Router getRouter() {
@@ -19,9 +19,9 @@ public class AppRouter {
     public static void setupRoutes() {
         router.setPrefix(PREFIX);
 
-        router.get("/users", AppHandler::getUsers);
+        router.get("/users", UserHandler::getAllUsers);
 
-        router.post("/users", AppHandler::addUser);
+        router.post("/users", UserHandler::addUser);
 
         router.put("/users/:id", (req, res) -> {
             res.send();

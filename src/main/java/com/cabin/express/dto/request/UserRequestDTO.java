@@ -1,13 +1,13 @@
-package com.cabin.express.dto;
+package com.cabin.express.dto.request;
 
-public class UserDTO {
+public class UserRequestDTO {
     private String name;
     private String email;
 
-    public UserDTO() {
+    public UserRequestDTO() {
     }
 
-    public UserDTO(String name, String email) {
+    public UserRequestDTO(String name, String email) {
         this.name = name;
         this.email = email;
     }
