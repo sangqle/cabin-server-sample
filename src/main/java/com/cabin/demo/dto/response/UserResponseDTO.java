@@ -1,6 +1,6 @@
-package com.cabin.express.dto.response;
+package com.cabin.demo.dto.response;
 
-import com.cabin.express.entity.User;
+import com.cabin.demo.entity.User;
 
 public class UserResponseDTO {
     private int id;

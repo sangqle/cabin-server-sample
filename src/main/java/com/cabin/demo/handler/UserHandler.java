@@ -1,13 +1,13 @@
-package com.cabin.express.handler;
+package com.cabin.demo.handler;
 
-import com.cabin.express.datasource.HibernateUtil;
-import com.cabin.express.dto.ApiResponse;
-import com.cabin.express.dto.request.UserRequestDTO;
-import com.cabin.express.dto.response.UserResponseDTO;
-import com.cabin.express.exception.GlobalExceptionHandler;
+import com.cabin.demo.datasource.HibernateUtil;
+import com.cabin.demo.dto.ApiResponse;
+import com.cabin.demo.dto.request.UserRequestDTO;
+import com.cabin.demo.dto.response.UserResponseDTO;
+import com.cabin.demo.exception.GlobalExceptionHandler;
 import com.cabin.express.http.Request;
 import com.cabin.express.http.Response;
-import com.cabin.express.service.UserService;
+import com.cabin.demo.service.UserService;
 
 import java.util.List;
 import java.util.NoSuchElementException;

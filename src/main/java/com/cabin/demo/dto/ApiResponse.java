@@ -1,4 +1,4 @@
-package com.cabin.express.dto;
+package com.cabin.demo.dto;
 
 public class ApiResponse<T> {
     private boolean success;

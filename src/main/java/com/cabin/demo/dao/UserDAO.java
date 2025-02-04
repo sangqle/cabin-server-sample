@@ -1,10 +1,10 @@
-package com.cabin.express.dao;
+package com.cabin.demo.dao;
 
-import com.cabin.express.entity.User;
+import com.cabin.demo.entity.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-import static com.cabin.express.datasource.HibernateUtil.getSessionFactory;
+import static com.cabin.demo.datasource.HibernateUtil.getSessionFactory;
 
 public class UserDAO extends BaseDAO<User> {
 

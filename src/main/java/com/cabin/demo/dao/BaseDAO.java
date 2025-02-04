@@ -1,4 +1,4 @@
-package com.cabin.express.dao;
+package com.cabin.demo.dao;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

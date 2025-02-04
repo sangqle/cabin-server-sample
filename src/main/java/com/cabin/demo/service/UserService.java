@@ -1,9 +1,9 @@
-package com.cabin.express.service;
+package com.cabin.demo.service;
 
-import com.cabin.express.dao.UserDAO;
-import com.cabin.express.dto.request.UserRequestDTO;
-import com.cabin.express.dto.response.UserResponseDTO;
-import com.cabin.express.entity.User;
+import com.cabin.demo.dao.UserDAO;
+import com.cabin.demo.dto.request.UserRequestDTO;
+import com.cabin.demo.dto.response.UserResponseDTO;
+import com.cabin.demo.entity.User;
 import org.hibernate.SessionFactory;
 
 import java.util.List;

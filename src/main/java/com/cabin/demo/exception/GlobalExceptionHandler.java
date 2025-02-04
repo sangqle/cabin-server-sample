@@ -1,6 +1,6 @@
-package com.cabin.express.exception;
+package com.cabin.demo.exception;
 
-import com.cabin.express.dto.ApiResponse;
+import com.cabin.demo.dto.ApiResponse;
 import com.cabin.express.http.Response;
 import java.util.NoSuchElementException;
 

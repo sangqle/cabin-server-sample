@@ -1,6 +1,6 @@
-package com.cabin.express;
+package com.cabin.demo;
 
-import com.cabin.express.server.HServer;
+import com.cabin.demo.server.HServer;
 
 public class MainApp {
     public static void main(String[] args) {

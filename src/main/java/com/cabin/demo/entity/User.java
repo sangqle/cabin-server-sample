@@ -1,4 +1,4 @@
-package com.cabin.express.entity;
+package com.cabin.demo.entity;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;

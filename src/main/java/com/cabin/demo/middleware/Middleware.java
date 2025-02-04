@@ -1,7 +1,8 @@
-package com.cabin.express.middleware;
+package com.cabin.demo.middleware;
 
 import com.cabin.express.http.Request;
 import com.cabin.express.http.Response;
+import com.cabin.express.middleware.MiddlewareChain;
 
 public class Middleware {
     public static void logRequest(Request req, Response res, MiddlewareChain next) {

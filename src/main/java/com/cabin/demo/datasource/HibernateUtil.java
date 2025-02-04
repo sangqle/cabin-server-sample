@@ -1,5 +1,6 @@
-package com.cabin.express.datasource;
+package com.cabin.demo.datasource;
 
+import com.cabin.demo.entity.User;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
@@ -13,7 +14,7 @@ public class HibernateUtil {
             Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
 
             // Add annotated classes
-            configuration.addAnnotatedClass(com.cabin.express.entity.User.class);
+            configuration.addAnnotatedClass(User.class);
 
             // Dynamically set DB properties from DatabaseConfig
             Properties dbProperties = new Properties();

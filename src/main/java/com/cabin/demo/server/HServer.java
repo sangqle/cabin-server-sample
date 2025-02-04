@@ -1,7 +1,9 @@
-package com.cabin.express.server;
+package com.cabin.demo.server;
 
-import com.cabin.express.middleware.Middleware;
-import com.cabin.express.router.UserRouter;
+import com.cabin.demo.middleware.Middleware;
+import com.cabin.demo.router.UserRouter;
+import com.cabin.express.server.CabinServer;
+import com.cabin.express.server.ServerBuilder;
 
 public class HServer {
     public static void setupAndStartServer() {
