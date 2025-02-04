@@ -28,4 +28,15 @@ public class AppHandler {
         }
         resp.send();
     }
+
+    public static void addUser(Request req, Response resp) {
+        try {
+            UserDAO userDAO = new UserDAO();
+            User user = req.getBodyAs(User.class);
+            userDAO.insertUser(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        resp.send();
+    }
 }

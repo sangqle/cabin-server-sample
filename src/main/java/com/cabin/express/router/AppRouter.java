@@ -21,9 +21,7 @@ public class AppRouter {
 
         router.get("/users", AppHandler::getUsers);
 
-        router.post("/users", (req, res) -> {
-            res.send();
-        });
+        router.post("/users", AppHandler::addUser);
 
         router.put("/users/:id", (req, res) -> {
             res.send();
