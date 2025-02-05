@@ -16,13 +16,15 @@ public class GlobalExceptionHandler {
             } else if (e instanceof NoSuchElementException) {
                 statusCode = 404;
                 message = "Resource not found";
+            } else {
+                e.printStackTrace();
             }
             resp.setStatusCode(statusCode);
             ApiResponse<String> error = ApiResponse.error(message);
             resp.writeBody(error);
             resp.send();
         } catch (Throwable ex) {
-            System.out.println("Error in handling exception: " + ex.getMessage());
+            System.out.println("Error in handling exception: " + ex);
         }
     }
 }

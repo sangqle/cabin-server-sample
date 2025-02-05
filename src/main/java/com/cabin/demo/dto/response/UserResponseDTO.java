@@ -13,8 +13,8 @@ public class UserResponseDTO {
         this.id = user.getId();
         this.name = user.getName();
         this.email = user.getEmail();
-        this.createdAt = user.getCreatedAt().toString();
-        this.updatedAt = user.getUpdatedAt().toString();
+        this.createdAt = user.getCreatedAt() != null ? user.getCreatedAt().toString() : "";
+        this.updatedAt = user.getUpdatedAt() != null ? user.getUpdatedAt().toString() : "";
     }
 
     public int getId() { return id; }
