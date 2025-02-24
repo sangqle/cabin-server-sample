@@ -1,9 +1,9 @@
 package com.cabin.demo.datasource;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.Properties;
+
+import java.io.InputStream;
 
 public class DatabaseConfig {
     private static final Properties properties = new Properties();
@@ -13,11 +13,13 @@ public class DatabaseConfig {
     }
 
     private static void loadConfig() {
-        String configPath = Paths.get(System.getProperty("user.home"), ".m2", "cabin", "settings.properties").toString();
-        try (FileInputStream fis = new FileInputStream(configPath)) {
-            properties.load(fis);
+        try (InputStream input = DatabaseConfig.class.getClassLoader().getResourceAsStream("application.properties")) {
+            if (input == null) {
+                throw new RuntimeException("Failed to load application.properties from classpath");
+            }
+            properties.load(input);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to load database configuration from " + configPath, e);
+            throw new RuntimeException("Error loading database configuration from application.properties", e);
         }
     }
 

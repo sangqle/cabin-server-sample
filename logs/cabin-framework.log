@@ -1,0 +1,321 @@
+2025-02-24 17:35:51 [main] INFO  CabinFramework - Server started on port 8080
+2025-02-24 17:36:15 [pool-2-thread-1] INFO  CabinFramework - Client closed connection: /[0:0:0:0:0:0:0:1]:51328
+2025-02-24 17:36:16 [pool-3-thread-1] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.4.Final
+2025-02-24 17:36:16 [pool-3-thread-1] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-02-24 17:36:16 [pool-3-thread-1] INFO  o.h.e.j.c.i.ConnectionProviderInitiator - HHH000130: Instantiating explicit connection provider: com.zaxxer.hikari.hibernate.HikariConnectionProvider
+2025-02-24 17:36:16 [pool-3-thread-1] WARN  c.z.h.h.HikariConnectionProvider - com.zaxxer.hikari.hibernate.HikariConnectionProvider has been deprecated for versions of Hibernate 4.3.6 and newer.  Please switch to org.hibernate.hikaricp.internal.HikariCPConnectionProvider.
+2025-02-24 17:36:16 [pool-3-thread-1] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-02-24 17:36:16 [pool-3-thread-1] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@7d82cee7
+2025-02-24 17:36:16 [pool-3-thread-1] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-02-24 17:36:17 [pool-3-thread-1] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [undefined/unknown]
+	Database driver: undefined/unknown
+	Database version: 8.0.32
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-02-24 17:36:18 [pool-3-thread-1] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-02-24 17:36:18 [pool-3-thread-1] INFO  o.hibernate.orm.connections.access - HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@da0d777] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
+2025-02-24 17:41:01 [main] INFO  CabinFramework - Server started on port 8080
+2025-02-24 17:41:10 [pool-2-thread-1] INFO  CabinFramework - Client closed connection: /[0:0:0:0:0:0:0:1]:58274
+2025-02-24 17:41:11 [pool-3-thread-1] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.4.Final
+2025-02-24 17:41:11 [pool-3-thread-1] ERROR CabinFramework - Error processing request: SessionFactory creation failed: java.lang.ExceptionInInitializerError
+java.lang.ExceptionInInitializerError: SessionFactory creation failed: java.lang.ExceptionInInitializerError
+	at com.cabin.demo.datasource.HibernateUtil.buildSessionFactory(HibernateUtil.java:28)
+	at com.cabin.demo.datasource.HibernateUtil.<clinit>(HibernateUtil.java:10)
+	at com.cabin.demo.handler.UserHandler.<clinit>(UserHandler.java:17)
+	at com.cabin.express.router.Router.lambda$handleRequest$0(Router.java:114)
+	at com.cabin.express.middleware.MiddlewareChain.next(MiddlewareChain.java:51)
+	at com.cabin.demo.middleware.Middleware.logRequest(Middleware.java:11)
+	at com.cabin.express.middleware.MiddlewareChain.next(MiddlewareChain.java:49)
+	at com.cabin.express.router.Router.handleRequest(Router.java:124)
+	at com.cabin.express.server.CabinServer.handleClientRequest(CabinServer.java:305)
+	at com.cabin.express.server.CabinServer.lambda$handleRead$4(CabinServer.java:283)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+2025-02-24 17:41:26 [main] INFO  CabinFramework - Server started on port 8080
+2025-02-24 17:41:28 [pool-2-thread-1] INFO  CabinFramework - Client closed connection: /[0:0:0:0:0:0:0:1]:55472
+2025-02-24 17:41:28 [pool-3-thread-1] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.4.Final
+2025-02-24 17:41:28 [pool-3-thread-1] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-02-24 17:41:28 [pool-2-thread-3] INFO  CabinFramework - Client closed connection: /[0:0:0:0:0:0:0:1]:55484
+2025-02-24 17:41:28 [pool-3-thread-1] INFO  o.h.e.j.c.i.ConnectionProviderInitiator - HHH000130: Instantiating explicit connection provider: com.zaxxer.hikari.hibernate.HikariConnectionProvider
+2025-02-24 17:41:28 [pool-3-thread-1] WARN  c.z.h.h.HikariConnectionProvider - com.zaxxer.hikari.hibernate.HikariConnectionProvider has been deprecated for versions of Hibernate 4.3.6 and newer.  Please switch to org.hibernate.hikaricp.internal.HikariCPConnectionProvider.
+2025-02-24 17:41:29 [pool-3-thread-1] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-02-24 17:41:30 [pool-3-thread-1] INFO  o.h.s.i.AbstractServiceRegistryImpl - HHH000369: Error stopping service [class com.zaxxer.hikari.hibernate.HikariConnectionProvider]
+java.lang.NullPointerException: Cannot invoke "com.zaxxer.hikari.HikariDataSource.close()" because "this.hds" is null
+	at com.zaxxer.hikari.hibernate.HikariConnectionProvider.stop(HikariConnectionProvider.java:154)
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.stopService(AbstractServiceRegistryImpl.java:385)
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.destroy(AbstractServiceRegistryImpl.java:366)
+	at org.hibernate.boot.registry.internal.StandardServiceRegistryImpl.destroy(StandardServiceRegistryImpl.java:142)
+	at org.hibernate.service.spi.ServiceRegistryImplementor.close(ServiceRegistryImplementor.java:32)
+	at org.hibernate.cfg.Configuration.buildSessionFactory(Configuration.java:1002)
+	at com.cabin.demo.datasource.HibernateUtil.buildSessionFactory(HibernateUtil.java:26)
+	at com.cabin.demo.datasource.HibernateUtil.<clinit>(HibernateUtil.java:10)
+	at com.cabin.demo.handler.UserHandler.<clinit>(UserHandler.java:17)
+	at com.cabin.express.router.Router.lambda$handleRequest$0(Router.java:114)
+	at com.cabin.express.middleware.MiddlewareChain.next(MiddlewareChain.java:51)
+	at com.cabin.demo.middleware.Middleware.logRequest(Middleware.java:11)
+	at com.cabin.express.middleware.MiddlewareChain.next(MiddlewareChain.java:49)
+	at com.cabin.express.router.Router.handleRequest(Router.java:124)
+	at com.cabin.express.server.CabinServer.handleClientRequest(CabinServer.java:305)
+	at com.cabin.express.server.CabinServer.lambda$handleRead$4(CabinServer.java:283)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+2025-02-24 17:41:30 [pool-3-thread-1] ERROR CabinFramework - Error processing request: SessionFactory creation failed: org.hibernate.service.spi.ServiceException: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment] due to: com.zaxxer.hikari.pool.HikariPool$PoolInitializationException: Failed to initialize pool: Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+java.lang.ExceptionInInitializerError: SessionFactory creation failed: org.hibernate.service.spi.ServiceException: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment] due to: com.zaxxer.hikari.pool.HikariPool$PoolInitializationException: Failed to initialize pool: Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+	at com.cabin.demo.datasource.HibernateUtil.buildSessionFactory(HibernateUtil.java:28)
+	at com.cabin.demo.datasource.HibernateUtil.<clinit>(HibernateUtil.java:10)
+	at com.cabin.demo.handler.UserHandler.<clinit>(UserHandler.java:17)
+	at com.cabin.express.router.Router.lambda$handleRequest$0(Router.java:114)
+	at com.cabin.express.middleware.MiddlewareChain.next(MiddlewareChain.java:51)
+	at com.cabin.demo.middleware.Middleware.logRequest(Middleware.java:11)
+	at com.cabin.express.middleware.MiddlewareChain.next(MiddlewareChain.java:49)
+	at com.cabin.express.router.Router.handleRequest(Router.java:124)
+	at com.cabin.express.server.CabinServer.handleClientRequest(CabinServer.java:305)
+	at com.cabin.express.server.CabinServer.lambda$handleRead$4(CabinServer.java:283)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+2025-02-24 17:41:30 [pool-3-thread-1] ERROR CabinFramework - Client channel is closed: java.nio.channels.SocketChannel[closed]
+2025-02-24 17:41:30 [pool-2-thread-4] INFO  CabinFramework - Client closed connection: /[0:0:0:0:0:0:0:1]:55500
+2025-02-24 17:41:30 [pool-3-thread-2] ERROR CabinFramework - Error processing request: Could not initialize class com.cabin.demo.handler.UserHandler
+java.lang.NoClassDefFoundError: Could not initialize class com.cabin.demo.handler.UserHandler
+	at com.cabin.express.router.Router.lambda$handleRequest$0(Router.java:114)
+	at com.cabin.express.middleware.MiddlewareChain.next(MiddlewareChain.java:51)
+	at com.cabin.demo.middleware.Middleware.logRequest(Middleware.java:11)
+	at com.cabin.express.middleware.MiddlewareChain.next(MiddlewareChain.java:49)
+	at com.cabin.express.router.Router.handleRequest(Router.java:124)
+	at com.cabin.express.server.CabinServer.handleClientRequest(CabinServer.java:305)
+	at com.cabin.express.server.CabinServer.lambda$handleRead$4(CabinServer.java:283)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.ExceptionInInitializerError: SessionFactory creation failed: org.hibernate.service.spi.ServiceException: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment] due to: com.zaxxer.hikari.pool.HikariPool$PoolInitializationException: Failed to initialize pool: Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server. [in thread "pool-3-thread-1"]
+	at com.cabin.demo.datasource.HibernateUtil.buildSessionFactory(HibernateUtil.java:28)
+	at com.cabin.demo.datasource.HibernateUtil.<clinit>(HibernateUtil.java:10)
+	at com.cabin.demo.handler.UserHandler.<clinit>(UserHandler.java:17)
+	... 12 common frames omitted
+2025-02-24 17:41:32 [pool-3-thread-3] ERROR CabinFramework - Error processing request: Could not initialize class com.cabin.demo.handler.UserHandler
+java.lang.NoClassDefFoundError: Could not initialize class com.cabin.demo.handler.UserHandler
+	at com.cabin.express.router.Router.lambda$handleRequest$0(Router.java:114)
+	at com.cabin.express.middleware.MiddlewareChain.next(MiddlewareChain.java:51)
+	at com.cabin.demo.middleware.Middleware.logRequest(Middleware.java:11)
+	at com.cabin.express.middleware.MiddlewareChain.next(MiddlewareChain.java:49)
+	at com.cabin.express.router.Router.handleRequest(Router.java:124)
+	at com.cabin.express.server.CabinServer.handleClientRequest(CabinServer.java:305)
+	at com.cabin.express.server.CabinServer.lambda$handleRead$4(CabinServer.java:283)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.ExceptionInInitializerError: SessionFactory creation failed: org.hibernate.service.spi.ServiceException: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment] due to: com.zaxxer.hikari.pool.HikariPool$PoolInitializationException: Failed to initialize pool: Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server. [in thread "pool-3-thread-1"]
+	at com.cabin.demo.datasource.HibernateUtil.buildSessionFactory(HibernateUtil.java:28)
+	at com.cabin.demo.datasource.HibernateUtil.<clinit>(HibernateUtil.java:10)
+	at com.cabin.demo.handler.UserHandler.<clinit>(UserHandler.java:17)
+	... 12 common frames omitted
+2025-02-24 17:41:33 [pool-3-thread-4] ERROR CabinFramework - Error processing request: Could not initialize class com.cabin.demo.handler.UserHandler
+java.lang.NoClassDefFoundError: Could not initialize class com.cabin.demo.handler.UserHandler
+	at com.cabin.express.router.Router.lambda$handleRequest$0(Router.java:114)
+	at com.cabin.express.middleware.MiddlewareChain.next(MiddlewareChain.java:51)
+	at com.cabin.demo.middleware.Middleware.logRequest(Middleware.java:11)
+	at com.cabin.express.middleware.MiddlewareChain.next(MiddlewareChain.java:49)
+	at com.cabin.express.router.Router.handleRequest(Router.java:124)
+	at com.cabin.express.server.CabinServer.handleClientRequest(CabinServer.java:305)
+	at com.cabin.express.server.CabinServer.lambda$handleRead$4(CabinServer.java:283)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.ExceptionInInitializerError: SessionFactory creation failed: org.hibernate.service.spi.ServiceException: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment] due to: com.zaxxer.hikari.pool.HikariPool$PoolInitializationException: Failed to initialize pool: Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server. [in thread "pool-3-thread-1"]
+	at com.cabin.demo.datasource.HibernateUtil.buildSessionFactory(HibernateUtil.java:28)
+	at com.cabin.demo.datasource.HibernateUtil.<clinit>(HibernateUtil.java:10)
+	at com.cabin.demo.handler.UserHandler.<clinit>(UserHandler.java:17)
+	... 12 common frames omitted
+2025-02-24 17:41:40 [pool-3-thread-5] ERROR CabinFramework - Error processing request: Could not initialize class com.cabin.demo.handler.UserHandler
+java.lang.NoClassDefFoundError: Could not initialize class com.cabin.demo.handler.UserHandler
+	at com.cabin.express.router.Router.lambda$handleRequest$0(Router.java:114)
+	at com.cabin.express.middleware.MiddlewareChain.next(MiddlewareChain.java:51)
+	at com.cabin.demo.middleware.Middleware.logRequest(Middleware.java:11)
+	at com.cabin.express.middleware.MiddlewareChain.next(MiddlewareChain.java:49)
+	at com.cabin.express.router.Router.handleRequest(Router.java:124)
+	at com.cabin.express.server.CabinServer.handleClientRequest(CabinServer.java:305)
+	at com.cabin.express.server.CabinServer.lambda$handleRead$4(CabinServer.java:283)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.ExceptionInInitializerError: SessionFactory creation failed: org.hibernate.service.spi.ServiceException: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment] due to: com.zaxxer.hikari.pool.HikariPool$PoolInitializationException: Failed to initialize pool: Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server. [in thread "pool-3-thread-1"]
+	at com.cabin.demo.datasource.HibernateUtil.buildSessionFactory(HibernateUtil.java:28)
+	at com.cabin.demo.datasource.HibernateUtil.<clinit>(HibernateUtil.java:10)
+	at com.cabin.demo.handler.UserHandler.<clinit>(UserHandler.java:17)
+	... 12 common frames omitted
+2025-02-24 17:43:29 [main] INFO  CabinFramework - Server started on port 8080
+2025-02-24 17:43:34 [pool-2-thread-1] INFO  CabinFramework - Client closed connection: /[0:0:0:0:0:0:0:1]:58826
+2025-02-24 17:43:34 [pool-3-thread-1] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.4.Final
+2025-02-24 17:43:34 [pool-3-thread-1] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-02-24 17:43:34 [pool-3-thread-1] INFO  o.h.e.j.c.i.ConnectionProviderInitiator - HHH000130: Instantiating explicit connection provider: com.zaxxer.hikari.hibernate.HikariConnectionProvider
+2025-02-24 17:43:34 [pool-3-thread-1] WARN  c.z.h.h.HikariConnectionProvider - com.zaxxer.hikari.hibernate.HikariConnectionProvider has been deprecated for versions of Hibernate 4.3.6 and newer.  Please switch to org.hibernate.hikaricp.internal.HikariCPConnectionProvider.
+2025-02-24 17:43:34 [pool-3-thread-1] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-02-24 17:43:36 [pool-3-thread-1] INFO  o.h.s.i.AbstractServiceRegistryImpl - HHH000369: Error stopping service [class com.zaxxer.hikari.hibernate.HikariConnectionProvider]
+java.lang.NullPointerException: Cannot invoke "com.zaxxer.hikari.HikariDataSource.close()" because "this.hds" is null
+	at com.zaxxer.hikari.hibernate.HikariConnectionProvider.stop(HikariConnectionProvider.java:154)
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.stopService(AbstractServiceRegistryImpl.java:385)
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.destroy(AbstractServiceRegistryImpl.java:366)
+	at org.hibernate.boot.registry.internal.StandardServiceRegistryImpl.destroy(StandardServiceRegistryImpl.java:142)
+	at org.hibernate.service.spi.ServiceRegistryImplementor.close(ServiceRegistryImplementor.java:32)
+	at org.hibernate.cfg.Configuration.buildSessionFactory(Configuration.java:1002)
+	at com.cabin.demo.datasource.HibernateUtil.buildSessionFactory(HibernateUtil.java:26)
+	at com.cabin.demo.datasource.HibernateUtil.<clinit>(HibernateUtil.java:10)
+	at com.cabin.demo.handler.UserHandler.<clinit>(UserHandler.java:17)
+	at com.cabin.express.router.Router.lambda$handleRequest$0(Router.java:114)
+	at com.cabin.express.middleware.MiddlewareChain.next(MiddlewareChain.java:51)
+	at com.cabin.demo.middleware.Middleware.logRequest(Middleware.java:11)
+	at com.cabin.express.middleware.MiddlewareChain.next(MiddlewareChain.java:49)
+	at com.cabin.express.router.Router.handleRequest(Router.java:124)
+	at com.cabin.express.server.CabinServer.handleClientRequest(CabinServer.java:305)
+	at com.cabin.express.server.CabinServer.lambda$handleRead$4(CabinServer.java:283)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+2025-02-24 17:43:36 [pool-3-thread-1] ERROR CabinFramework - Error processing request: SessionFactory creation failed: org.hibernate.service.spi.ServiceException: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment] due to: com.zaxxer.hikari.pool.HikariPool$PoolInitializationException: Failed to initialize pool: Public Key Retrieval is not allowed
+java.lang.ExceptionInInitializerError: SessionFactory creation failed: org.hibernate.service.spi.ServiceException: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment] due to: com.zaxxer.hikari.pool.HikariPool$PoolInitializationException: Failed to initialize pool: Public Key Retrieval is not allowed
+	at com.cabin.demo.datasource.HibernateUtil.buildSessionFactory(HibernateUtil.java:28)
+	at com.cabin.demo.datasource.HibernateUtil.<clinit>(HibernateUtil.java:10)
+	at com.cabin.demo.handler.UserHandler.<clinit>(UserHandler.java:17)
+	at com.cabin.express.router.Router.lambda$handleRequest$0(Router.java:114)
+	at com.cabin.express.middleware.MiddlewareChain.next(MiddlewareChain.java:51)
+	at com.cabin.demo.middleware.Middleware.logRequest(Middleware.java:11)
+	at com.cabin.express.middleware.MiddlewareChain.next(MiddlewareChain.java:49)
+	at com.cabin.express.router.Router.handleRequest(Router.java:124)
+	at com.cabin.express.server.CabinServer.handleClientRequest(CabinServer.java:305)
+	at com.cabin.express.server.CabinServer.lambda$handleRead$4(CabinServer.java:283)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+2025-02-24 17:44:41 [main] INFO  CabinFramework - Server started on port 8080
+2025-02-24 17:44:47 [pool-2-thread-1] INFO  CabinFramework - Client closed connection: /[0:0:0:0:0:0:0:1]:43584
+2025-02-24 17:44:47 [pool-3-thread-1] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.4.Final
+2025-02-24 17:44:47 [pool-3-thread-1] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-02-24 17:44:47 [pool-3-thread-1] INFO  o.h.e.j.c.i.ConnectionProviderInitiator - HHH000130: Instantiating explicit connection provider: com.zaxxer.hikari.hibernate.HikariConnectionProvider
+2025-02-24 17:44:47 [pool-3-thread-1] WARN  c.z.h.h.HikariConnectionProvider - com.zaxxer.hikari.hibernate.HikariConnectionProvider has been deprecated for versions of Hibernate 4.3.6 and newer.  Please switch to org.hibernate.hikaricp.internal.HikariCPConnectionProvider.
+2025-02-24 17:44:48 [pool-3-thread-1] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-02-24 17:44:49 [pool-3-thread-1] INFO  o.h.s.i.AbstractServiceRegistryImpl - HHH000369: Error stopping service [class com.zaxxer.hikari.hibernate.HikariConnectionProvider]
+java.lang.NullPointerException: Cannot invoke "com.zaxxer.hikari.HikariDataSource.close()" because "this.hds" is null
+	at com.zaxxer.hikari.hibernate.HikariConnectionProvider.stop(HikariConnectionProvider.java:154)
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.stopService(AbstractServiceRegistryImpl.java:385)
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.destroy(AbstractServiceRegistryImpl.java:366)
+	at org.hibernate.boot.registry.internal.StandardServiceRegistryImpl.destroy(StandardServiceRegistryImpl.java:142)
+	at org.hibernate.service.spi.ServiceRegistryImplementor.close(ServiceRegistryImplementor.java:32)
+	at org.hibernate.cfg.Configuration.buildSessionFactory(Configuration.java:1002)
+	at com.cabin.demo.datasource.HibernateUtil.buildSessionFactory(HibernateUtil.java:26)
+	at com.cabin.demo.datasource.HibernateUtil.<clinit>(HibernateUtil.java:10)
+	at com.cabin.demo.handler.UserHandler.<clinit>(UserHandler.java:17)
+	at com.cabin.express.router.Router.lambda$handleRequest$0(Router.java:114)
+	at com.cabin.express.middleware.MiddlewareChain.next(MiddlewareChain.java:51)
+	at com.cabin.demo.middleware.Middleware.logRequest(Middleware.java:11)
+	at com.cabin.express.middleware.MiddlewareChain.next(MiddlewareChain.java:49)
+	at com.cabin.express.router.Router.handleRequest(Router.java:124)
+	at com.cabin.express.server.CabinServer.handleClientRequest(CabinServer.java:305)
+	at com.cabin.express.server.CabinServer.lambda$handleRead$4(CabinServer.java:283)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+2025-02-24 17:44:49 [pool-3-thread-1] ERROR CabinFramework - Error processing request: SessionFactory creation failed: org.hibernate.service.spi.ServiceException: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment] due to: com.zaxxer.hikari.pool.HikariPool$PoolInitializationException: Failed to initialize pool: Public Key Retrieval is not allowed
+java.lang.ExceptionInInitializerError: SessionFactory creation failed: org.hibernate.service.spi.ServiceException: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment] due to: com.zaxxer.hikari.pool.HikariPool$PoolInitializationException: Failed to initialize pool: Public Key Retrieval is not allowed
+	at com.cabin.demo.datasource.HibernateUtil.buildSessionFactory(HibernateUtil.java:28)
+	at com.cabin.demo.datasource.HibernateUtil.<clinit>(HibernateUtil.java:10)
+	at com.cabin.demo.handler.UserHandler.<clinit>(UserHandler.java:17)
+	at com.cabin.express.router.Router.lambda$handleRequest$0(Router.java:114)
+	at com.cabin.express.middleware.MiddlewareChain.next(MiddlewareChain.java:51)
+	at com.cabin.demo.middleware.Middleware.logRequest(Middleware.java:11)
+	at com.cabin.express.middleware.MiddlewareChain.next(MiddlewareChain.java:49)
+	at com.cabin.express.router.Router.handleRequest(Router.java:124)
+	at com.cabin.express.server.CabinServer.handleClientRequest(CabinServer.java:305)
+	at com.cabin.express.server.CabinServer.lambda$handleRead$4(CabinServer.java:283)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+2025-02-24 17:45:30 [main] INFO  CabinFramework - Server started on port 8080
+2025-02-24 17:45:34 [pool-2-thread-1] INFO  CabinFramework - Client closed connection: /[0:0:0:0:0:0:0:1]:43198
+2025-02-24 17:45:34 [pool-3-thread-1] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.4.Final
+2025-02-24 17:46:15 [pool-3-thread-1] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-02-24 17:46:15 [pool-3-thread-1] INFO  o.h.e.j.c.i.ConnectionProviderInitiator - HHH000130: Instantiating explicit connection provider: com.zaxxer.hikari.hibernate.HikariConnectionProvider
+2025-02-24 17:46:15 [pool-3-thread-1] WARN  c.z.h.h.HikariConnectionProvider - com.zaxxer.hikari.hibernate.HikariConnectionProvider has been deprecated for versions of Hibernate 4.3.6 and newer.  Please switch to org.hibernate.hikaricp.internal.HikariCPConnectionProvider.
+2025-02-24 17:46:15 [pool-3-thread-1] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-02-24 17:46:17 [pool-3-thread-1] INFO  o.h.s.i.AbstractServiceRegistryImpl - HHH000369: Error stopping service [class com.zaxxer.hikari.hibernate.HikariConnectionProvider]
+java.lang.NullPointerException: Cannot invoke "com.zaxxer.hikari.HikariDataSource.close()" because "this.hds" is null
+	at com.zaxxer.hikari.hibernate.HikariConnectionProvider.stop(HikariConnectionProvider.java:154)
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.stopService(AbstractServiceRegistryImpl.java:385)
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.destroy(AbstractServiceRegistryImpl.java:366)
+	at org.hibernate.boot.registry.internal.StandardServiceRegistryImpl.destroy(StandardServiceRegistryImpl.java:142)
+	at org.hibernate.service.spi.ServiceRegistryImplementor.close(ServiceRegistryImplementor.java:32)
+	at org.hibernate.cfg.Configuration.buildSessionFactory(Configuration.java:1002)
+	at com.cabin.demo.datasource.HibernateUtil.buildSessionFactory(HibernateUtil.java:26)
+	at com.cabin.demo.datasource.HibernateUtil.<clinit>(HibernateUtil.java:10)
+	at com.cabin.demo.handler.UserHandler.<clinit>(UserHandler.java:17)
+	at com.cabin.express.router.Router.lambda$handleRequest$0(Router.java:114)
+	at com.cabin.express.middleware.MiddlewareChain.next(MiddlewareChain.java:51)
+	at com.cabin.demo.middleware.Middleware.logRequest(Middleware.java:11)
+	at com.cabin.express.middleware.MiddlewareChain.next(MiddlewareChain.java:49)
+	at com.cabin.express.router.Router.handleRequest(Router.java:124)
+	at com.cabin.express.server.CabinServer.handleClientRequest(CabinServer.java:305)
+	at com.cabin.express.server.CabinServer.lambda$handleRead$4(CabinServer.java:283)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run$$$capture(FutureTask.java:264)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+2025-02-24 17:46:48 [main] INFO  CabinFramework - Server started on port 8080
+2025-02-24 17:46:53 [pool-2-thread-1] INFO  CabinFramework - Client closed connection: /[0:0:0:0:0:0:0:1]:45044
+2025-02-24 17:46:53 [pool-3-thread-1] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.4.Final
+2025-02-24 17:46:53 [pool-3-thread-1] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-02-24 17:46:53 [pool-3-thread-1] INFO  o.h.e.j.c.i.ConnectionProviderInitiator - HHH000130: Instantiating explicit connection provider: com.zaxxer.hikari.hibernate.HikariConnectionProvider
+2025-02-24 17:46:53 [pool-3-thread-1] WARN  c.z.h.h.HikariConnectionProvider - com.zaxxer.hikari.hibernate.HikariConnectionProvider has been deprecated for versions of Hibernate 4.3.6 and newer.  Please switch to org.hibernate.hikaricp.internal.HikariCPConnectionProvider.
+2025-02-24 17:46:53 [pool-3-thread-1] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-02-24 17:46:54 [pool-3-thread-1] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@2b16213f
+2025-02-24 17:46:54 [pool-3-thread-1] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-02-24 17:46:54 [pool-3-thread-1] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [undefined/unknown]
+	Database driver: undefined/unknown
+	Database version: 8.0.32
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-02-24 17:46:55 [pool-3-thread-1] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-02-24 17:46:55 [pool-3-thread-1] INFO  o.hibernate.orm.connections.access - HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@6c64ca] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.

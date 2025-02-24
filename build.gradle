@@ -13,7 +13,7 @@ repositories {
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
-    implementation(files('libs/cabin-1.0.1.jar'))
+    implementation(files('libs/cabin-2.0.1.jar'))
 
     // Mysql and hikaricp dependencies
     implementation 'mysql:mysql-connector-java:8.0.33'

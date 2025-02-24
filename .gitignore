@@ -42,3 +42,6 @@ bin/
 .DS_Store
 /gradle/
 /.idea/
+
+### envs
+src/main/resources/application.properties
