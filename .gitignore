@@ -46,3 +46,6 @@ bin/
 ### envs
 src/main/resources/application.properties
 **/.env
+
+### logs files
+*.log
