@@ -25,11 +25,14 @@ public class User {
     private String email;
 
     @CreationTimestamp
-    @Column(columnDefinition = "DATETIME(3)", updatable = false)
+    // use Postgres TIMESTAMP with fractional seconds
+    @Column(nullable = false, updatable = false,
+            columnDefinition = "TIMESTAMP(3) WITHOUT TIME ZONE")
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(columnDefinition = "DATETIME(3)")
+    @Column(nullable = false,
+            columnDefinition = "TIMESTAMP(3) WITHOUT TIME ZONE")
     private LocalDateTime updatedAt;
 
     public User() {}
