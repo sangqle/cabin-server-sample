@@ -1,29 +1,49 @@
 package com.cabin.demo.datasource;
 
 import com.cabin.demo.entity.User;
+import com.zaxxer.hikari.HikariDataSource;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import com.zaxxer.hikari.HikariConfig;
 
-import java.util.Properties;
 
 public class HibernateUtil {
     private static final SessionFactory sessionFactory = buildSessionFactory();
 
     private static SessionFactory buildSessionFactory() {
         try {
-            Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
+            // 1) Configure HikariCP
+            HikariConfig hikariConfig = new HikariConfig();
+            hikariConfig.setDriverClassName(DatabaseConfig.getDriverClass());
+            hikariConfig.setJdbcUrl(DatabaseConfig.getDbUrl());
+            hikariConfig.setUsername(DatabaseConfig.getDbUser());
+            hikariConfig.setPassword(DatabaseConfig.getDbPassword());
 
-            // Add annotated classes
-            configuration.addAnnotatedClass(User.class);
+            // (optional tuning)
+            hikariConfig.setMaximumPoolSize(10);
+            hikariConfig.setConnectionTestQuery("SELECT 1");
+            HikariDataSource dataSource = new HikariDataSource(hikariConfig);
 
-            // Dynamically set DB properties from DatabaseConfig
-            Properties dbProperties = new Properties();
-            dbProperties.setProperty("hibernate.connection.url", DatabaseConfig.getDbUrl());
-            dbProperties.setProperty("hibernate.connection.username", DatabaseConfig.getDbUser());
-            dbProperties.setProperty("hibernate.connection.password", DatabaseConfig.getDbPassword());
-            configuration.setProperties(dbProperties);
+            // 2) Build the StandardServiceRegistry
+            StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
+                    .applySetting("hibernate.dialect", DatabaseConfig.getDialect())
+                    .applySetting("hibernate.hbm2ddl.auto", "update")
+                    .applySetting("hibernate.show_sql", "true")
+                    .applySetting("hibernate.format_sql", "true")
+                    .applySetting("hibernate.connection.datasource", dataSource)
+                    .build();
 
-            return configuration.buildSessionFactory();
+            // 3) Add your entities
+            MetadataSources sources = new MetadataSources(registry)
+                    .addAnnotatedClass(User.class); // Add your entity classes here
+
+            Metadata metadata = sources.getMetadataBuilder().build();
+
+            // 4) Build SessionFactory
+            return metadata.getSessionFactoryBuilder().build();
         } catch (Throwable ex) {
             throw new ExceptionInInitializerError("SessionFactory creation failed: " + ex);
         }
