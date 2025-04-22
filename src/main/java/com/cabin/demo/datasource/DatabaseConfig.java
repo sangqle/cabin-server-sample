@@ -67,7 +67,7 @@ public class DatabaseConfig {
         loadConfig();
         return properties.getProperty(
                 "DB_DIALECT",
-                "org.hibernate.dialect.PostgreSQL95Dialect"
+                "org.hibernate.dialect.PostgreSQLDialect"
         );
     }
 }
