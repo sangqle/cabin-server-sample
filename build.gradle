@@ -26,8 +26,10 @@ dependencies {
     implementation 'org.hibernate:hibernate-core:6.6.4.Final'
 
     // S3 dependencies
-    implementation("software.amazon.awssdk:s3:2.31.25")
+    implementation("software.amazon.awssdk:s3:2.29.52")
 
+    // Extract metadata dependencies
+    implementation 'com.drewnoakes:metadata-extractor:2.19.0'
 }
 
 test {
