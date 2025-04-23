@@ -13,8 +13,6 @@ public class HServer {
             CabinServer server = new ServerBuilder().setMaxPoolSize(200).setDefaultPoolSize(10).build();
 
             // Setup routes
-            server.use(UserRouter.getRouter());
-            server.use(PostRouter.getRouter());
             server.use(UploadRouter.getRouter());
 
             server.use(Middleware::logRequest);

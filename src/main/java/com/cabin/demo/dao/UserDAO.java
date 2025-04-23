@@ -1,6 +1,6 @@
 package com.cabin.demo.dao;
 
-import com.cabin.demo.entity.User;
+import com.cabin.demo.entity.auth.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 

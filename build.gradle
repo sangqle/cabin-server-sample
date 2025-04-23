@@ -30,6 +30,9 @@ dependencies {
 
     // Extract metadata dependencies
     implementation 'com.drewnoakes:metadata-extractor:2.19.0'
+
+    // https://mvnrepository.com/artifact/org.projectlombok/lombok
+    compileOnly("org.projectlombok:lombok:1.18.36")
 }
 
 test {
@@ -55,4 +58,10 @@ jar {
                 'Main-Class': 'com.cabin.demo.MainApp'
         )
     }
+}
+
+// Apply to the 'jar' task
+tasks.named('jar') {
+    // ignore duplicate entries
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }

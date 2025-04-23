@@ -25,7 +25,15 @@ public class UploadHandler {
             // Iterate through all directories and tags
             for (Directory directory : metadata.getDirectories()) {
                 for (Tag tag : directory.getTags()) {
-                    System.err.println(tag);
+                    String tagName = tag.getTagName();
+                    String description = tag.getDescription();
+                    int tagType = tag.getTagType();
+                    String tagTypeHex = tag.getTagTypeHex();
+                    String directoryName = tag.getDirectoryName();
+
+                    System.err.println(String.format("Tag: %s, Description: %s, Type: %d, Type Hex: %s, Directory: %s",
+                            tagName, description, tagType, tagTypeHex, directoryName));
+
                 }
             }
         } catch (Exception e) {

@@ -1,6 +1,6 @@
 package com.cabin.demo.datasource;
 
-import com.cabin.demo.entity.User;
+import com.cabin.demo.entity.auth.User;
 import com.zaxxer.hikari.HikariDataSource;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;

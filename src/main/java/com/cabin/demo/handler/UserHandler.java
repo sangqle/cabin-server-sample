@@ -18,9 +18,6 @@ public class UserHandler {
 
     public static void getAllUsers(Request req, Response resp) {
         try {
-            List<UserResponseDTO> users = userService.getAllUsers();
-            ApiResponse<List<UserResponseDTO>> response = ApiResponse.success(users);
-            resp.writeBody(response);
         } catch (Exception e) {
             GlobalExceptionHandler.handleException(e, resp);
         } finally {
@@ -31,13 +28,6 @@ public class UserHandler {
     public static void getUserById(Request req, Response resp) {
         try {
             int userId = Integer.parseInt(req.getPathParam("id"));
-            UserResponseDTO user = userService.findUserById(userId);
-            if (user != null) {
-                ApiResponse<UserResponseDTO> response = ApiResponse.success(user);
-                resp.writeBody(response);
-            } else {
-                throw new NoSuchElementException();
-            }
         } catch (Exception e) {
             GlobalExceptionHandler.handleException(e, resp);
         } finally {
@@ -49,22 +39,6 @@ public class UserHandler {
         try {
             UserRequestDTO userDTO = req.getBodyAs(UserRequestDTO.class);
             if (userDTO == null) throw new IllegalArgumentException("Invalid request body");
-
-            if (userService.findByEmail(userDTO.getEmail()) != null) {
-                resp.setStatusCode(400);
-                ApiResponse<String> response = ApiResponse.error("User with the same email already exists");
-                resp.writeBody(response);
-                return;
-            }
-
-            boolean success = userService.createUser(userDTO);
-            if (success) {
-                resp.setStatusCode(201);
-                ApiResponse<String> response = ApiResponse.success("User created successfully");
-                resp.writeBody(response);
-            } else {
-                throw new RuntimeException("Failed to insert user");
-            }
         } catch (Exception e) {
             GlobalExceptionHandler.handleException(e, resp);
         } finally {

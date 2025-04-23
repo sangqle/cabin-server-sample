@@ -1,13 +1,11 @@
-package com.cabin.demo.entity;
+package com.cabin.demo.entity.album;
 
+import com.cabin.demo.entity.photo.Photo;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "album_photos")
 public class AlbumPhoto {
-
-    @EmbeddedId
-    private AlbumPhotoId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("albumId")
