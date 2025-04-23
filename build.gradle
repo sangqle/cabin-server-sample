@@ -32,7 +32,8 @@ dependencies {
     implementation 'com.drewnoakes:metadata-extractor:2.19.0'
 
     // https://mvnrepository.com/artifact/org.projectlombok/lombok
-    compileOnly("org.projectlombok:lombok:1.18.36")
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
 }
 
 test {
