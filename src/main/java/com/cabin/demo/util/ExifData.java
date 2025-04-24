@@ -4,7 +4,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -14,14 +16,14 @@ public class ExifData {
     private String lensModel;
     private Integer iso;
     private String exposureTime;
-    private Double fNumber;
-    private Double focalLength;
+    private BigDecimal fNumber;
+    private BigDecimal focalLength;
     private String flash;
     private Double latitude;
     private Double longitude;
     private LocalDateTime shootingTime;
 
-    private String exifEntry;
+    private Map<String, Object> exifMap;
 
     @Override
     public String toString() {

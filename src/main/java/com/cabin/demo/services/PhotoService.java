@@ -9,10 +9,14 @@ import com.cabin.demo.repository.PhotoRepo;
 import com.cabin.demo.util.ExifData;
 import com.cabin.demo.util.ExifUtil;
 import com.cabin.express.http.UploadedFile;
+import com.drew.metadata.Metadata;
+import com.google.gson.Gson;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.InputStream;
 
 
 public class PhotoService {
@@ -24,8 +28,11 @@ public class PhotoService {
     public static final PhotoService INSTANCE = new PhotoService();
 
     public long savePhoto(User user, UploadedFile file) throws Exception {
+         Gson gson = new Gson();
+
         long photoId = 0;
         byte[] content = file.getContent();
+
         ExifData exifData = ExifUtil.getExifData(content);
 
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -41,16 +48,25 @@ public class PhotoService {
             photo.setDescription(file.getFileName());
             photo.setShootingAt(exifData.getShootingTime());
             photo.setUrl("https://image.truyenquan.com/DSC09067.jpg");
-            session.save(photo);
+            session.persist(photo);
 
             // Save EXIF Data
             PhotoExif photoExif = new PhotoExif();
             photoExif.setPhoto(photo); // Assuming a relationship is set
-            photoExif.setExifRaw(exifData.getExifEntry());
+            photoExif.setExifJson(gson.toJsonTree(exifData.getExifMap()).toString());
             photoExif.setCameraModel(exifData.getCameraModel());
             photoExif.setLensModel(exifData.getLensModel());
+            photoExif.setFocalLength(exifData.getFocalLength());
+            photoExif.setExposureTime(exifData.getExposureTime());
+            photoExif.setFNumber(exifData.getFNumber());
             photoExif.setIso(exifData.getIso());
-            session.save(photoExif);
+            photoExif.setFlash(exifData.getFlash());
+
+            // gps
+            photoExif.setLatitude(exifData.getLatitude());
+            photoExif.setLongitude(exifData.getLongitude());
+
+            session.persist(photoExif);
 
             transaction.commit();
             photoId = photo.getId();

@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Getter
 @Setter
@@ -42,7 +44,14 @@ public class PhotoExif {
     @Column(name = "flash", length = 100)
     private String flash;
 
-    // — raw EXIF JSON dump —
-    @Column(name = "exif_raw", columnDefinition = "TEXT")
-    private String exifRaw;
+    // Longitude and Latitude
+    @Column(name = "longitude")
+    private Double longitude;
+
+    @Column(name = "latitude")
+    private Double latitude;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name="exif_json", columnDefinition="jsonb")
+    private String exifJson;
 }

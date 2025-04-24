@@ -7,12 +7,12 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import java.util.List;
 
-public class PhotoExifRepo {
+public class PhotoExifRepository {
     private final SessionFactory sessionFactory;
 
-    public static final PhotoExifRepo INSTANCE = new PhotoExifRepo();
+    public static final PhotoExifRepository INSTANCE = new PhotoExifRepository();
 
-    private PhotoExifRepo() {
+    private PhotoExifRepository() {
         this.sessionFactory = HibernateUtil.getSessionFactory();
     }
 
