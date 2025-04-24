@@ -6,8 +6,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity
-@Table(name = "exif_entries")
 public class ExifEntry {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

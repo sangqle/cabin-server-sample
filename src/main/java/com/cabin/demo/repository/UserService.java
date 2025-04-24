@@ -1,10 +1,8 @@
-package com.cabin.demo.service;
+package com.cabin.demo.repository;
 
 import com.cabin.demo.dao.UserDAO;
 import com.cabin.demo.dto.request.UserRequestDTO;
 import org.hibernate.SessionFactory;
-
-import java.util.List;
 
 public class UserService {
     private final UserDAO userDAO;

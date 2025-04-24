@@ -1,6 +1,13 @@
 package com.cabin.demo.datasource;
 
+import com.cabin.demo.entity.album.Album;
+import com.cabin.demo.entity.album.AlbumPhoto;
 import com.cabin.demo.entity.auth.User;
+import com.cabin.demo.entity.auth.UserAuth;
+import com.cabin.demo.entity.photo.Photo;
+import com.cabin.demo.entity.photo.PhotoExif;
+import com.cabin.demo.entity.photo.PhotoTag;
+import com.cabin.demo.entity.photo.Tag;
 import com.zaxxer.hikari.HikariDataSource;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
@@ -34,11 +41,19 @@ public class HibernateUtil {
                     .applySetting("hibernate.show_sql", "true")
                     .applySetting("hibernate.format_sql", "true")
                     .applySetting("hibernate.connection.datasource", dataSource)
+                    .applySetting("hibernate.transaction.coordinator_class", "jdbc")
                     .build();
 
             // 3) Add your entities
             MetadataSources sources = new MetadataSources(registry)
-                    .addAnnotatedClass(User.class); // Add your entity classes here
+                    .addAnnotatedClass(User.class)
+                    .addAnnotatedClass(Photo.class)
+                    .addAnnotatedClass(PhotoExif.class)
+                    .addAnnotatedClass(Tag.class)
+                    .addAnnotatedClass(PhotoTag.class)
+                    .addAnnotatedClass(Album.class)
+                    .addAnnotatedClass(AlbumPhoto.class)
+                    .addAnnotatedClass(UserAuth.class);
 
             Metadata metadata = sources.getMetadataBuilder().build();
 

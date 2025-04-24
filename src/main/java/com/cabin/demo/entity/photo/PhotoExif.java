@@ -4,14 +4,45 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @Entity
+@Table(name = "photo_exif")
 public class PhotoExif {
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @MapsId("photoId")
+    @Id
+    @Column(name = "photo_id")
+    private Long photoId;
+
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @MapsId
     @JoinColumn(name = "photo_id")
     private Photo photo;
 
-    private String rawData;
+    // — promoted, searchable EXIF fields —
+    @Column(name = "camera_model", length = 100)
+    private String cameraModel;
+
+    @Column(name = "lens_model", length = 100)
+    private String lensModel;
+
+    @Column(name = "iso")
+    private Integer iso;
+
+    @Column(name = "exposure_time", length = 50)
+    private String exposureTime;
+
+    @Column(name = "f_number", precision = 5, scale = 2)
+    private BigDecimal fNumber;
+
+    @Column(name = "focal_length", precision = 7, scale = 2)
+    private BigDecimal focalLength;
+
+    @Column(name = "flash", length = 100)
+    private String flash;
+
+    // — raw EXIF JSON dump —
+    @Column(name = "exif_raw", columnDefinition = "jsonb")
+    private String exifRaw;
 }

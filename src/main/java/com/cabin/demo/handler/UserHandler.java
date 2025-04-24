@@ -1,16 +1,11 @@
 package com.cabin.demo.handler;
 
 import com.cabin.demo.datasource.HibernateUtil;
-import com.cabin.demo.dto.ApiResponse;
 import com.cabin.demo.dto.request.UserRequestDTO;
-import com.cabin.demo.dto.response.UserResponseDTO;
 import com.cabin.demo.exception.GlobalExceptionHandler;
 import com.cabin.express.http.Request;
 import com.cabin.express.http.Response;
-import com.cabin.demo.service.UserService;
-
-import java.util.List;
-import java.util.NoSuchElementException;
+import com.cabin.demo.repository.UserService;
 
 public class UserHandler {
 

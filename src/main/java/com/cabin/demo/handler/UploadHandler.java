@@ -3,6 +3,7 @@ package com.cabin.demo.handler;
 import com.cabin.demo.dto.ApiResponse;
 import com.cabin.demo.exception.GlobalExceptionHandler;
 import com.cabin.demo.helper.R2Helper;
+import com.cabin.demo.services.PhotoService;
 import com.cabin.demo.util.ExifData;
 import com.cabin.demo.util.ExifUtil;
 import com.cabin.express.http.Request;
@@ -28,15 +29,8 @@ public class UploadHandler {
             R2Helper r2Helper = R2Helper.getInstance();
             for (UploadedFile file : files) {
                 // Process each file as needed
-                System.out.println("Uploaded file: " + file.getFileName());
-                byte[] content = file.getContent();
-                Map<String, String> allMetadata = file.getAllMetadata();
-
-                ExifData exifData = ExifUtil.getExifData(content);
-                System.err.println("Exif Data: " + exifData.getExifEntry());
-
-
-                // You can save the file or perform other operations here
+                long photoId = PhotoService.INSTANCE.savePhoto(file);
+                System.err.println("Photo ID: " + photoId);
 //                r2Helper.uploadPhoto("openext-photo", file.getFileName(), content);
             }
             response = ApiResponse.success("Files uploaded successfully");

@@ -10,20 +10,15 @@ import lombok.Setter;
 @Entity
 @Table(name = "photo_tags")
 public class PhotoTag {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @MapsId("photoId")
     @JoinColumn(name = "photo_id")
     private Photo photo;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @MapsId("tagId")
     @JoinColumn(name = "tag_id")
     private Tag tag;
-
-    public PhotoTag() {}
-
-    public PhotoTag(Photo photo, Tag tag) {
-        this.photo = photo;
-        this.tag   = tag;
-    }
 }
