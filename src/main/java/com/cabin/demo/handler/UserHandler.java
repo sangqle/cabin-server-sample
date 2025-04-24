@@ -5,11 +5,12 @@ import com.cabin.demo.dto.request.UserRequestDTO;
 import com.cabin.demo.exception.GlobalExceptionHandler;
 import com.cabin.express.http.Request;
 import com.cabin.express.http.Response;
-import com.cabin.demo.repository.UserService;
+import com.cabin.demo.repository.UserRepository;
 
 public class UserHandler {
 
-    private static final UserService userService = new UserService(HibernateUtil.getSessionFactory());
+    private static final UserRepository userService = new UserRepository(HibernateUtil.getSessionFactory());
+
 
     public static void getAllUsers(Request req, Response resp) {
         try {
@@ -34,6 +35,14 @@ public class UserHandler {
         try {
             UserRequestDTO userDTO = req.getBodyAs(UserRequestDTO.class);
             if (userDTO == null) throw new IllegalArgumentException("Invalid request body");
+            boolean isCreated = userService.saveUser(userDTO);
+            if (isCreated) {
+                resp.setStatusCode(201);
+                resp.writeBody("User created successfully");
+            } else {
+                resp.setStatusCode(400);
+                resp.writeBody("Failed to create user");
+            }
         } catch (Exception e) {
             GlobalExceptionHandler.handleException(e, resp);
         } finally {

@@ -1,7 +1,6 @@
 package com.cabin.demo.server;
 
 import com.cabin.demo.middleware.Middleware;
-import com.cabin.demo.router.PostRouter;
 import com.cabin.demo.router.UploadRouter;
 import com.cabin.demo.router.UserRouter;
 import com.cabin.express.server.CabinServer;
@@ -14,6 +13,7 @@ public class HServer {
 
             // Setup routes
             server.use(UploadRouter.getRouter());
+            server.use(UserRouter.getRouter());
 
             server.use(Middleware::logRequest);
 

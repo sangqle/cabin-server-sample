@@ -43,6 +43,6 @@ public class PhotoExif {
     private String flash;
 
     // — raw EXIF JSON dump —
-    @Column(name = "exif_raw", columnDefinition = "jsonb")
+    @Column(name = "exif_raw", columnDefinition = "TEXT")
     private String exifRaw;
 }
