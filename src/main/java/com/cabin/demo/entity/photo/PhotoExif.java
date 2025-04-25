@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -21,6 +23,10 @@ public class PhotoExif {
     @MapsId
     @JoinColumn(name = "photo_id")
     private Photo photo;
+
+    @Column(name = "shooting_at",
+            columnDefinition = "TIMESTAMP(3) WITHOUT TIME ZONE")
+    private LocalDateTime shootingAt;
 
     // — promoted, searchable EXIF fields —
     @Column(name = "camera_model", length = 100)

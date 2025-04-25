@@ -8,12 +8,12 @@ import org.hibernate.Transaction;
 
 import java.util.List;
 
-public class PhotoRepo {
+public class PhotoRepository {
 
     private final SessionFactory sessionFactory;
-    public static final PhotoRepo INSTANCE = new PhotoRepo();
+    public static final PhotoRepository INSTANCE = new PhotoRepository();
 
-    public PhotoRepo() {
+    public PhotoRepository() {
         this.sessionFactory = HibernateUtil.getSessionFactory();
     }
 

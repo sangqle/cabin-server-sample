@@ -1,22 +1,17 @@
 package com.cabin.demo.services;
 
-import com.cabin.demo.datasource.DatabaseConfig;
 import com.cabin.demo.datasource.HibernateUtil;
 import com.cabin.demo.entity.auth.User;
 import com.cabin.demo.entity.photo.Photo;
 import com.cabin.demo.entity.photo.PhotoExif;
-import com.cabin.demo.repository.PhotoRepo;
 import com.cabin.demo.util.ExifData;
 import com.cabin.demo.util.ExifUtil;
 import com.cabin.express.http.UploadedFile;
-import com.drew.metadata.Metadata;
 import com.google.gson.Gson;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.InputStream;
 
 
 public class PhotoService {
@@ -46,7 +41,6 @@ public class PhotoService {
             photo.setUser(user);
             photo.setTitle(file.getFileName());
             photo.setDescription(file.getFileName());
-            photo.setShootingAt(exifData.getShootingTime());
             photo.setObjectKey("DSC09067.jpg");
             session.persist(photo);
 
@@ -61,6 +55,7 @@ public class PhotoService {
             photoExif.setFNumber(exifData.getFNumber());
             photoExif.setIso(exifData.getIso());
             photoExif.setFlash(exifData.getFlash());
+            photoExif.setShootingAt(exifData.getShootingTime());
 
             // gps
             photoExif.setLatitude(exifData.getLatitude());
