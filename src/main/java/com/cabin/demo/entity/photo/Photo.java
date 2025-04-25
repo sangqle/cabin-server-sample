@@ -56,4 +56,17 @@ public class Photo {
             orphanRemoval = true,
             fetch = FetchType.LAZY)
     private List<AlbumPhoto> albumPhotos = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "Photo{" +
+                "id=" + id +
+                ", user=" + user +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", objectKey='" + objectKey + '\'' +
+                ", createdAt=" + createdAt +
+                ", uploadedAt=" + uploadedAt +
+                '}';
+    }
 }

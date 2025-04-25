@@ -23,7 +23,7 @@ public class PhotoService {
     public static final PhotoService INSTANCE = new PhotoService();
 
     public long savePhoto(User user, UploadedFile file) throws Exception {
-         Gson gson = new Gson();
+        Gson gson = new Gson();
 
         long photoId = 0;
         byte[] content = file.getContent();
@@ -72,5 +72,18 @@ public class PhotoService {
             session.close();
         }
         return photoId;
+    }
+
+    public Photo getPhotoById(long id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Photo photo = null;
+        try {
+            photo = session.get(Photo.class, id);
+        } catch (Exception e) {
+            log.error("Error fetching photo: {}", e.getMessage());
+        } finally {
+            session.close();
+        }
+        return photo;
     }
 }
