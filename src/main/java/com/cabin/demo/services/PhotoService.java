@@ -47,7 +47,7 @@ public class PhotoService {
             photo.setTitle(file.getFileName());
             photo.setDescription(file.getFileName());
             photo.setShootingAt(exifData.getShootingTime());
-            photo.setUrl("https://image.truyenquan.com/DSC09067.jpg");
+            photo.setObjectKey("DSC09067.jpg");
             session.persist(photo);
 
             // Save EXIF Data

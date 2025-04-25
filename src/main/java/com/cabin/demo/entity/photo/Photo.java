@@ -34,8 +34,8 @@ public class Photo {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String url;
+    @Column(name = "object_key",nullable = false, columnDefinition = "TEXT")
+    private String objectKey;
 
     @Column(name = "shooting_at", nullable = false,
             columnDefinition = "TIMESTAMP(3) WITHOUT TIME ZONE")
