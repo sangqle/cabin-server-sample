@@ -69,4 +69,8 @@ public abstract class BaseDAO<T> {
             return session.createQuery("FROM " + entityType.getSimpleName(), entityType).list();
         }
     }
+
+    protected SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
 }

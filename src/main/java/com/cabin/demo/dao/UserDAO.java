@@ -4,8 +4,6 @@ import com.cabin.demo.entity.auth.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-import static com.cabin.demo.datasource.HibernateUtil.getSessionFactory;
-
 public class UserDAO extends BaseDAO<User> {
 
     public UserDAO(SessionFactory sessionFactory) {

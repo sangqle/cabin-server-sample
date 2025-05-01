@@ -1,7 +1,7 @@
 package com.cabin.demo.handler;
 
 import com.cabin.demo.datasource.HibernateUtil;
-import com.cabin.demo.dto.request.UserRequestDTO;
+import com.cabin.demo.dto.client.request.UserRequestDTO;
 import com.cabin.demo.exception.GlobalExceptionHandler;
 import com.cabin.express.http.Request;
 import com.cabin.express.http.Response;

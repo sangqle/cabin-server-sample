@@ -1,4 +1,4 @@
-package com.cabin.demo.dto.request;
+package com.cabin.demo.dto.client.request;
 
 public class UserRequestDTO {
     private String name;

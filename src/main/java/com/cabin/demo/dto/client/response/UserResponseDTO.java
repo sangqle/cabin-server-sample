@@ -1,4 +1,4 @@
-package com.cabin.demo.dto.response;
+package com.cabin.demo.dto.client.response;
 
 import com.cabin.demo.entity.auth.User;
 

@@ -1,4 +1,4 @@
-package com.cabin.demo.dto.request;
+package com.cabin.demo.dto.client.request;
 
 import lombok.Getter;
 import lombok.Setter;
