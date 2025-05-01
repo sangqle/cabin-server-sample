@@ -4,9 +4,9 @@ import com.cabin.demo.entity.auth.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-public class UserDAO extends BaseDAO<User> {
+public class UserDao extends BaseDAO<User> {
 
-    public UserDAO(SessionFactory sessionFactory) {
+    public UserDao(SessionFactory sessionFactory) {
         super(sessionFactory, User.class);
     }
 

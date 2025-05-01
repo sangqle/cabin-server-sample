@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.ALL;
+
 @Getter
 @Setter
 @Entity
@@ -45,8 +47,7 @@ public class Photo {
             columnDefinition = "TIMESTAMP(3) WITHOUT TIME ZONE")
     private LocalDateTime uploadedAt = LocalDateTime.now();
 
-    @OneToOne()
-    @JoinColumn(name = "photo_exif_id")
+    @OneToOne(mappedBy = "photo", cascade = ALL, orphanRemoval = true)
     private PhotoExif photoExif;
 
 //    @OneToMany(mappedBy = "photo",

@@ -3,6 +3,7 @@ package com.cabin.demo.services;
 import com.cabin.demo.dao.PhotoDao;
 import com.cabin.demo.datasource.HibernateUtil;
 import com.cabin.demo.dto.PhotoDto;
+import com.cabin.demo.dto.UserDto;
 import com.cabin.demo.entity.auth.User;
 import com.cabin.demo.entity.photo.Photo;
 import com.cabin.demo.entity.photo.PhotoExif;

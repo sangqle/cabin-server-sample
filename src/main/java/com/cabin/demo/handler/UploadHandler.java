@@ -2,20 +2,22 @@ package com.cabin.demo.handler;
 
 import com.cabin.demo.datasource.HibernateUtil;
 import com.cabin.demo.dto.ApiResponse;
+import com.cabin.demo.dto.UserDto;
 import com.cabin.demo.entity.auth.User;
 import com.cabin.demo.exception.GlobalExceptionHandler;
 import com.cabin.demo.helper.R2Helper;
-import com.cabin.demo.repository.UserRepository;
 import com.cabin.demo.services.PhotoService;
+import com.cabin.demo.services.UserService;
 import com.cabin.express.http.Request;
 import com.cabin.express.http.Response;
 import com.cabin.express.http.UploadedFile;
 
 import java.util.List;
 
-public class UploadHandler {
-    private static final UserRepository userService = new UserRepository(HibernateUtil.getSessionFactory());
 
+public class UploadHandler {
+
+    private static final UserService userService = UserService.INSTANCE;
 
     public static void uploadPhoto(Request req, Response resp) {
         try {
@@ -28,7 +30,7 @@ public class UploadHandler {
                 resp.writeBody(response);
                 return;
             }
-            User user = userService.getUserById(1); // Example user ID
+            User user = userService.getUserById(1L); // Example user ID
             R2Helper r2Helper = R2Helper.getInstance();
             for (UploadedFile file : files) {
                 // Process each file as needed
