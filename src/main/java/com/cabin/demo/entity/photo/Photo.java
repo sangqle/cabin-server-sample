@@ -24,7 +24,7 @@ public class Photo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne()
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -45,17 +45,21 @@ public class Photo {
             columnDefinition = "TIMESTAMP(3) WITHOUT TIME ZONE")
     private LocalDateTime uploadedAt = LocalDateTime.now();
 
-    @OneToMany(mappedBy = "photo",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY)
-    private List<PhotoTag> photoTags = new ArrayList<>();
+    @OneToOne()
+    @JoinColumn(name = "photo_exif_id")
+    private PhotoExif photoExif;
 
-    @OneToMany(mappedBy = "photo",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY)
-    private List<AlbumPhoto> albumPhotos = new ArrayList<>();
+//    @OneToMany(mappedBy = "photo",
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true,
+//            fetch = FetchType.LAZY)
+//    private List<PhotoTag> photoTags = new ArrayList<>();
+//
+//    @OneToMany(mappedBy = "photo",
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true,
+//            fetch = FetchType.LAZY)
+//    private List<AlbumPhoto> albumPhotos = new ArrayList<>();
 
     @Override
     public String toString() {

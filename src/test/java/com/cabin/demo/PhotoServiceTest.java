@@ -16,8 +16,9 @@ public class PhotoServiceTest {
     @Test
     public void testGetPhotoByUserId() {
         int userId = 1;
-        Photo photoById = photoService.getPhotoById(4);
+        Photo photoById = photoService.getPhotoById(1);
         System.err.println(photoById.getUser().getName());
+        System.err.println(photoById.getPhotoExif().getCameraModel());
 
     }
 }
