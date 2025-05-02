@@ -20,7 +20,7 @@ public interface PhotoMapper {
     @Named("encodePhotoId")
     default String encodeId(Long id) {
         try {
-            return IdObfuscator.encodeId(id);
+            return IdObfuscator.encodePhotoId(id);
         } catch (Exception e) {
             throw new RuntimeException("Failed to encode ID", e);
         }

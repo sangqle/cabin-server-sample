@@ -18,8 +18,7 @@ public interface UserMapper {
     @Named("encodeUserId")
     default String encodeId(Long id) {
         try {
-            System.err.println("encodeId: " + id);
-            return IdObfuscator.encodeId(id);
+            return IdObfuscator.encodeUserId(id);
         } catch (Exception e) {
             throw new RuntimeException("Failed to encode ID", e);
         }
