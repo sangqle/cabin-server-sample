@@ -1,7 +1,10 @@
 package com.cabin.demo.util.id;
 
+import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 /**
  * Utility to derive a 64-bit key from a passphrase.
@@ -27,4 +30,16 @@ public class KeyUtil {
             throw new IllegalStateException("Failed to derive encryption key", e);
         }
     }
+
+    public static SecretKeySpec deriveAesKeySpec(String passphrase) {
+        try {
+            byte[] hash = MessageDigest.getInstance("SHA-256")
+                    .digest(passphrase.getBytes(StandardCharsets.UTF_8));
+            byte[] keyBytes = Arrays.copyOf(hash, 16);  // AES-128 requires 16 bytes :contentReference[oaicite:7]{index=7}
+            return new SecretKeySpec(keyBytes, "AES");
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Failed to derive AES key", e);
+        }
+    }
+
 }

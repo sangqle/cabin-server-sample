@@ -27,7 +27,7 @@ public class PhotoHandler {
     public static void getPosts(Request req, Response resp) {
         try {
             List<PhotoDto> photos =
-                    PhotoService.INSTANCE.getSlicePhotoByUserId(1L, 0, 10);
+                    PhotoService.INSTANCE.getSlicePhotoByUserId(1L, 0, 20);
             ApiResponse<List<PhotoDto>> response =
                     ApiResponse.success(photos);
 

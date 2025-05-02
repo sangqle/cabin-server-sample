@@ -87,4 +87,12 @@ public class R2Helper {
             throw new RuntimeException("Failed to upload object to R2: " + e.awsErrorDetails().errorMessage(), e);
         }
     }
+
+    public void deleteObject(String bucketName, String objectKey) {
+        try {
+            s3.deleteObject(b -> b.bucket(bucketName).key(objectKey));
+        } catch (S3Exception e) {
+            throw new RuntimeException("Failed to delete object from R2: " + e.awsErrorDetails().errorMessage(), e);
+        }
+    }
 }

@@ -9,14 +9,19 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(uses = {UserMapper.class})
+import java.util.HashMap;
+import java.util.Map;
+
+@Mapper(uses = { UserMapper.class })
 public interface PhotoMapper {
     PhotoMapper INSTANCE = Mappers.getMapper(PhotoMapper.class);
 
-    @Mapping(source = "photo.user", target = "user")
-    @Mapping(source = "photo.photoExif", target = "exif")
-    @Mapping(source = "photo.id", target = "id", qualifiedByName = "encodePhotoId")
-    @Mapping(source = "photo.objectKey", target = "photoUrl", qualifiedByName = "photoUrlMapping")
+    @Mapping(source = "photo.id",       target = "id",   qualifiedByName = "encodePhotoId")
+    @Mapping(source = "photo.rawKey", target = "rawImageUrl", qualifiedByName = "photoUrlMapping")
+    @Mapping(source = "photo.webKeys", target = "urls", qualifiedByName = "photoWebUrlVersionMapping")
+    @Mapping(source = "photo.title",    target = "title")
+    @Mapping(source = "photo.user",     target = "user")
+    @Mapping(source = "photo.photoExif",target = "exif")
     PhotoDto toDto(Photo photo);
 
     @Named("encodePhotoId")
@@ -35,4 +40,19 @@ public interface PhotoMapper {
         }
         return String.format("%s/%s", Environment.getString("S3_BASE_URL"), objectKey);
     }
+
+    @Named("photoWebUrlVersionMapping")
+    default HashMap<String, String> photoWebUrlVersionMapping(Map<String, String> webKeys) {
+        HashMap<String, String> urls = new HashMap<>();
+        if (webKeys == null) {
+            return urls;
+        }
+        for (Map.Entry<String, String> entry : webKeys.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            urls.put(key, photoUrlMapping(value));
+        }
+        return urls;
+    }
+
 }

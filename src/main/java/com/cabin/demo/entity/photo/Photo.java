@@ -1,14 +1,14 @@
 package com.cabin.demo.entity.photo;
 
-import com.cabin.demo.entity.album.AlbumPhoto;
 import com.cabin.demo.entity.auth.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -36,8 +36,8 @@ public class Photo {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "object_key",nullable = false, columnDefinition = "TEXT")
-    private String objectKey;
+    @Column(name = "raw_key", columnDefinition = "TEXT")
+    private String rawKey;
 
     @Column(name = "created_at", nullable = false,
             columnDefinition = "TIMESTAMP(3) WITHOUT TIME ZONE")
@@ -50,17 +50,10 @@ public class Photo {
     @OneToOne(mappedBy = "photo", cascade = ALL, orphanRemoval = true)
     private PhotoExif photoExif;
 
-//    @OneToMany(mappedBy = "photo",
-//            cascade = CascadeType.ALL,
-//            orphanRemoval = true,
-//            fetch = FetchType.LAZY)
-//    private List<PhotoTag> photoTags = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "photo",
-//            cascade = CascadeType.ALL,
-//            orphanRemoval = true,
-//            fetch = FetchType.LAZY)
-//    private List<AlbumPhoto> albumPhotos = new ArrayList<>();
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "web_keys", columnDefinition = "jsonb")
+    private Map<String, String> webKeys;
+
 
     @Override
     public String toString() {
@@ -69,7 +62,7 @@ public class Photo {
                 ", user=" + user +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", objectKey='" + objectKey + '\'' +
+                ", raw_key" + rawKey + '\'' +
                 ", createdAt=" + createdAt +
                 ", uploadedAt=" + uploadedAt +
                 '}';

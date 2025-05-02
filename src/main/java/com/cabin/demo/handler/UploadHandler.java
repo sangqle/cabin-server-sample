@@ -1,8 +1,6 @@
 package com.cabin.demo.handler;
 
-import com.cabin.demo.datasource.HibernateUtil;
 import com.cabin.demo.dto.ApiResponse;
-import com.cabin.demo.dto.UserDto;
 import com.cabin.demo.entity.auth.User;
 import com.cabin.demo.exception.GlobalExceptionHandler;
 import com.cabin.demo.helper.R2Helper;
@@ -33,10 +31,7 @@ public class UploadHandler {
             User user = userService.getUserById(1L); // Example user ID
             R2Helper r2Helper = R2Helper.getInstance();
             for (UploadedFile file : files) {
-                // Process each file as needed
-                long photoId = PhotoService.INSTANCE.savePhoto(user, file);
-                System.err.println("Photo ID: " + photoId);
-//                r2Helper.uploadPhoto("openext-photo", file.getFileName(), content);
+                PhotoService.INSTANCE.savePhoto(user, file);
             }
             response = ApiResponse.success("Files uploaded successfully");
             resp.writeBody(response);
