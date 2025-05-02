@@ -8,7 +8,7 @@ import lombok.Setter;
 public class PhotoDto {
     private String id;
     private String title;
-    private String objectKey;
+    private String photoUrl;
     private UserDto user;
     private PhotoExifDto exif;
 
@@ -18,7 +18,7 @@ public class PhotoDto {
         return "PhotoDto{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", objectKey='" + objectKey + '\'' +
+                ", photoUrl='" + photoUrl + '\'' +
                 ", user=" + user +
                 ", exif=" + exif +
                 '}';
