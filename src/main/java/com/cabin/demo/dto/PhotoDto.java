@@ -6,11 +6,12 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PhotoDto {
-    private Long id;
+    private String id;
     private String title;
     private String objectKey;
     private UserDto user;
     private PhotoExifDto exif;
+
 
     @Override
     public String toString() {

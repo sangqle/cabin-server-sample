@@ -15,7 +15,7 @@ public class PhotoExifDto {
     @Override
     public String toString() {
         return "PhotoExifDto{" +
-                "shootingAt=" + shootingAt +
+//                "shootingAt=" + shootingAt +
                 ", cameraModel='" + cameraModel + '\'' +
                 ", lensModel='" + lensModel + '\'' +
                 '}';
