@@ -95,4 +95,15 @@ public class R2Helper {
             throw new RuntimeException("Failed to delete object from R2: " + e.awsErrorDetails().errorMessage(), e);
         }
     }
+
+    /**
+     * Returns the Presigned URL for the given object key in the specified bucket.
+     */
+    public String getPresignedUrl(String bucketName, String objectKey) {
+        try {
+            return s3.utilities().getUrl(b -> b.bucket(bucketName).key(objectKey)).toString();
+        } catch (S3Exception e) {
+            throw new RuntimeException("Failed to get presigned URL: " + e.awsErrorDetails().errorMessage(), e);
+        }
+    }
 }

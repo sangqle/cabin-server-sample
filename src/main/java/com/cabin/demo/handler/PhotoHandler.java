@@ -5,6 +5,7 @@ import com.cabin.demo.dto.PhotoDto;
 import com.cabin.demo.exception.GlobalExceptionHandler;
 import com.cabin.demo.services.PhotoService;
 import com.cabin.demo.util.LocalDateTimeAdapter;
+import com.cabin.demo.util.id.IdObfuscator;
 import com.cabin.express.http.Request;
 import com.cabin.express.http.Response;
 import com.google.gson.Gson;
@@ -26,8 +27,11 @@ public class PhotoHandler {
 
     public static void getPosts(Request req, Response resp) {
         try {
+            int offset = Integer.parseInt(req.getQueryParam("offset"));
+            int limit = Integer.parseInt(req.getQueryParam("limit"));
+            String userId = req.getPathParam("userId");
             List<PhotoDto> photos =
-                    PhotoService.INSTANCE.getSlicePhotoByUserId(1L, 0, 20);
+                    PhotoService.INSTANCE.getSlicePhotoByUserId(IdObfuscator.decodeUserId(userId), offset, limit);
             ApiResponse<List<PhotoDto>> response =
                     ApiResponse.success(photos);
 

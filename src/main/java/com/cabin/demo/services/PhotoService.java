@@ -7,9 +7,11 @@ import com.cabin.demo.entity.auth.User;
 import com.cabin.demo.entity.photo.Photo;
 import com.cabin.demo.entity.photo.PhotoExif;
 import com.cabin.demo.helper.R2Helper;
+import com.cabin.demo.helper.R2PresignUtil;
 import com.cabin.demo.mapper.PhotoMapper;
 import com.cabin.demo.util.ExifData;
 import com.cabin.demo.util.ExifUtil;
+import com.cabin.demo.util.HttpUtil;
 import com.cabin.demo.util.id.IdObfuscator;
 import com.cabin.demo.util.photo.FileNameEncoder;
 import com.cabin.demo.util.photo.ImageUtils;
@@ -21,6 +23,7 @@ import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.util.*;
 
 
@@ -29,6 +32,15 @@ public class PhotoService {
     private final PhotoDao photoDao = new PhotoDao(HibernateUtil.getSessionFactory());
     private static final String S3_BUCKET = Environment.getString("S3_BUCKET");
     R2Helper r2Helper = R2Helper.getInstance();
+
+    R2PresignUtil r2PresignUtil = new R2PresignUtil(
+            Environment.getString("S3_ACCOUNT_ID"),
+            Environment.getString("S3_ACCESS_KEY"),
+            Environment.getString("S3_SECRET_KEY")
+    );
+
+    HttpUtil http = new HttpUtil("http://localhost:8000");
+
 
     private PhotoService() {
     }
@@ -97,18 +109,20 @@ public class PhotoService {
 
             // 3. Upload raw file
             r2Helper.uploadPhoto(S3_BUCKET, rawKey, content);
+//            http.uploadRaw(content, rawKey, file.getFileName(), file.getContentType());
 
             // 4. Generate & upload web-optimized versions
             Map<String, String> webKeys = new HashMap<>();
-            for (String size : List.of("full")) {
-                byte[] resized = ImageUtils.toJpeg(file.getContent());
+            for (String size : List.of("original", "medium")) {
                 String webKey = String.format(
                         "photos/%s/%s/web/%s.jpg",
                         userEncId,
                         photoEncId,
                         size
                 );
-                r2Helper.uploadPhoto(S3_BUCKET, webKey, resized);
+//                r2Helper.uploadPhoto(S3_BUCKET, webKey, resized);
+                String s = http.uploadAndConvert(content, webKey, size);
+                System.err.println("rs: " + s);
                 uploadedKeys.add(webKey);
                 webKeys.put(size, webKey);
             }
@@ -123,13 +137,13 @@ public class PhotoService {
         } catch (Exception ex) {
             log.error("Error saving photo: {}", ex.getMessage());
 
-            // 6. Compensation: delete any uploaded objects to avoid orphans
-            if (rawKey != null) {
-                r2Helper.deleteObject("openext-photo", rawKey);
-            }
-            for (String key : uploadedKeys) {
-                r2Helper.deleteObject("openext-photo", key);
-            }
+//            // 6. Compensation: delete any uploaded objects to avoid orphans
+//            if (rawKey != null) {
+//                r2Helper.deleteObject("openext-photo", rawKey);
+//            }
+//            for (String key : uploadedKeys) {
+//                r2Helper.deleteObject("openext-photo", key);
+//            }
             return -1;
         }
         return photoId;
@@ -157,5 +171,15 @@ public class PhotoService {
             log.error("Error getting slice of photos by user ID: {}", ex.getMessage());
         }
         return photoDtos;
+    }
+
+    public String getR2PresignedUrl(String bucket, String objectKey, Duration duration) {
+        String presignedUrl = null;
+        try {
+            presignedUrl = r2PresignUtil.getPresignedUrl(bucket, objectKey, duration);
+        } catch (Exception ex) {
+            log.error("Error getting presigned URL: {}", ex.getMessage());
+        }
+        return presignedUrl;
     }
 }

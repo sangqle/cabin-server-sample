@@ -19,5 +19,6 @@ public class UploadRouter {
     public static void setupRoutes() {
         router.setPrefix(PREFIX);
         router.post("/image", UploadHandler::uploadPhoto);
+        router.get("/presigned-url", UploadHandler::getPresignedUrl);
     }
 }

@@ -44,9 +44,10 @@ dependencies {
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
 
     // image processing
-    implementation("org.apache.commons:commons-imaging:1.0-alpha3")
-    // https://mvnrepository.com/artifact/com.twelvemonkeys.imageio/imageio-tiff
     implementation("com.twelvemonkeys.imageio:imageio-tiff:3.10.1")
+
+    implementation("org.apache.httpcomponents:httpclient:4.3.6")
+    implementation("org.apache.httpcomponents:httpmime:4.3.1")
 }
 
 test {
