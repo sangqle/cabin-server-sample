@@ -16,8 +16,11 @@ import com.cabin.demo.util.ExifUtil;
 import com.cabin.demo.util.HttpUtil;
 import com.cabin.demo.util.id.IdObfuscator;
 import com.cabin.demo.util.photo.FileNameEncoder;
+import com.cabin.demo.worker.RpcClient;
 import com.cabin.express.config.Environment;
 import com.cabin.express.http.UploadedFile;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -26,12 +29,15 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 
 public class PhotoService {
     private static final Logger log = LoggerFactory.getLogger(PhotoService.class);
     private final PhotoDao photoDao = new PhotoDao(HibernateUtil.getSessionFactory());
     private static final String R2_BUCKET = Environment.getString("R2_BUCKET");
+    private final RpcClient rpcClient = new RpcClient();
+
 
     MinioHelper minioHelper = ServiceLocator.get(MinioHelper.class);
     R2Helper r2Helper = ServiceLocator.get(R2Helper.class);
@@ -45,10 +51,17 @@ public class PhotoService {
     HttpUtil http = new HttpUtil("http://localhost:8000");
 
 
-    private PhotoService() {
+    private PhotoService() throws Exception {
     }
 
-    public static final PhotoService INSTANCE = new PhotoService();
+    public static final PhotoService INSTANCE;
+    static {
+        try {
+            INSTANCE = new PhotoService();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public long savePhoto(User user, UploadedFile file) throws Exception {
         Gson gson = new Gson();
@@ -122,6 +135,21 @@ public class PhotoService {
 
             transaction.commit();
             photoId = photo.getId();
+
+            // 2) Send RPC request and asynchronously handle reply
+            CompletableFuture<String> reply = rpcClient.callConvert(photoId, rawKey);
+            long finalPhotoId = photoId;
+            reply.thenAccept(responseJson -> {
+                // Parse JSON, update DB with webKey
+                String webKey = null;
+                try {
+                    webKey = new ObjectMapper().readTree(responseJson).get("webKey").asText();
+                    System.err.println("webKey: " + webKey);
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+                markWebKeyReady(finalPhotoId, webKey);
+            });
         } catch (Exception ex) {
             log.error("Error saving photo: {}", ex.getMessage());
             // 6. Compensation: delete any uploaded objects to avoid orphans
@@ -131,6 +159,29 @@ public class PhotoService {
             return -1;
         }
         return photoId;
+    }
+
+    public void markWebKeyReady(long photoId, String webKey) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            Photo photo = session.get(Photo.class, photoId);
+            if (photo != null) {
+                Map<String, String> webKeys = new HashMap<>();
+                webKeys.put("web", webKey);
+                photo.setWebKeys(webKeys);
+                session.merge(photo);
+            }
+            transaction.commit();
+        } catch (Exception ex) {
+            log.error("Error marking web key ready: {}", ex.getMessage());
+            if (transaction != null) {
+                transaction.rollback();
+            }
+        } finally {
+            session.close();
+        }
     }
 
     public PhotoDto getPhotoDto(long id) {

@@ -42,7 +42,7 @@ public class HibernateUtil {
             StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
                     .applySetting("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect") // Assuming PostgreSQL
                     .applySetting("hibernate.hbm2ddl.auto", "update")
-                    .applySetting("hibernate.show_sql", "true")
+                    .applySetting("hibernate.show_sql", "false")
                     .applySetting("hibernate.format_sql", "true")
                     .applySetting("hibernate.connection.datasource", dataSource)
                     .applySetting("hibernate.transaction.coordinator_class", "jdbc")

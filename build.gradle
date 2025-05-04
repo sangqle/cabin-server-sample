@@ -50,6 +50,8 @@ dependencies {
     implementation("org.apache.httpcomponents:httpmime:4.3.1")
 
     implementation("io.minio:minio:8.5.17")
+
+    implementation("com.rabbitmq:amqp-client:5.20.0")
 }
 
 test {
