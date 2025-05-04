@@ -1,7 +1,6 @@
 package com.cabin.demo.helper;
 
-import com.cabin.demo.config.AppConfig;
-import com.cabin.express.config.Environment;
+import com.cabin.demo.config.R2Config;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -15,17 +14,14 @@ import java.net.URI;
 
 public class R2Helper {
     private final S3Client s3;
+    R2Config r2Config;
 
-    private static R2Helper instance;
+    public R2Helper(R2Config config) {
+        this.r2Config = config;
 
-    private R2Helper() {
-        String accountId = Environment.getString("S3_ACCOUNT_ID");
-        String accessKey = Environment.getString("S3_ACCESS_KEY");
-        String secretKey = Environment.getString("S3_SECRET_KEY");
+        String endpoint = String.format("https://%s.r2.cloudflarestorage.com", this.r2Config.getAccountId());
 
-        String endpoint = String.format("https://%s.r2.cloudflarestorage.com", accountId);
-
-        AwsBasicCredentials creds = AwsBasicCredentials.create(accessKey, secretKey);
+        AwsBasicCredentials creds = AwsBasicCredentials.create(this.r2Config.getAccessKey(), this.r2Config.getSecretKey());
 
         this.s3 = S3Client.builder()
                 .endpointOverride(URI.create(endpoint))
@@ -77,7 +73,7 @@ public class R2Helper {
                     .build();
             // Upload the object
             s3.putObject(request, RequestBody.fromBytes(data));
-            return String.format("https://%s.r2.cloudflarestorage.com/%s/%s", Environment.getString("S3_ACCOUNT_ID"), bucketName, objectKey);
+            return String.format("%s/%s", r2Config.getBaseUrl(), objectKey);
         } catch (S3Exception e) {
             throw new RuntimeException("Failed to upload object to R2: " + e.awsErrorDetails().errorMessage(), e);
         }

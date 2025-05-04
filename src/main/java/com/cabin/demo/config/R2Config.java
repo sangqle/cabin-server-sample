@@ -22,6 +22,11 @@ public class R2Config {
     /** R2 Secret Access Key */
     private final String secretKey;
 
+    private final String baseUrl;
+
+    /** R2 bucket name */
+    private final String bucketName;
+
     /** How long presigned URLs should live. */
     @Builder.Default
     private final Duration presignTtl = Duration.ofMinutes(15);
@@ -36,6 +41,8 @@ public class R2Config {
         String accessKey = Environment.getString("R2_ACCESS_KEY");
         String secretKey = Environment.getString("R2_SECRET_KEY");
         String ttlMins   = Environment.getString("R2_PRESIGN_TTL_MINUTES");
+        String baseUrl   = Environment.getString("R2_BASE_URL");
+        String bucketName = Environment.getString("R2_BUCKET");
 
         Duration ttl = Duration.ofMinutes(15);
         if (ttlMins != null && !ttlMins.isBlank()) {
@@ -47,6 +54,8 @@ public class R2Config {
                 .accessKey(accessKey)
                 .secretKey(secretKey)
                 .presignTtl(ttl)
+                .baseUrl(baseUrl)
+                .bucketName(bucketName)
                 .build();
     }
 

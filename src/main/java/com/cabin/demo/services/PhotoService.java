@@ -31,15 +31,15 @@ import java.util.*;
 public class PhotoService {
     private static final Logger log = LoggerFactory.getLogger(PhotoService.class);
     private final PhotoDao photoDao = new PhotoDao(HibernateUtil.getSessionFactory());
-    private static final String S3_BUCKET = Environment.getString("S3_BUCKET");
-    R2Helper r2Helper = ServiceLocator.get(R2Helper.class);
+    private static final String S3_BUCKET = Environment.getString("R2_BUCKET");
 
     MinioHelper minioHelper = ServiceLocator.get(MinioHelper.class);
+    R2Helper r2Helper = ServiceLocator.get(R2Helper.class);
 
     R2PresignUtil r2PresignUtil = new R2PresignUtil(
-            Environment.getString("S3_ACCOUNT_ID"),
-            Environment.getString("S3_ACCESS_KEY"),
-            Environment.getString("S3_SECRET_KEY")
+            Environment.getString("R2_ACCOUNT_ID", ""),
+            Environment.getString("R2_ACCESS_KEY", ""),
+            Environment.getString("R2_SECRET_KEY", "")
     );
 
     HttpUtil http = new HttpUtil("http://localhost:8000");
@@ -111,8 +111,8 @@ public class PhotoService {
             );
 
             // 3. Upload raw file
-            String s = minioHelper.uploadPhoto(S3_BUCKET, rawKey, content);
-            System.err.println("save to minio: " + s);
+            String s = r2Helper.uploadPhoto(S3_BUCKET, rawKey, content);
+            System.err.println("save to r2Helper: " + s);
 //            http.uploadRaw(content, rawKey, file.getFileName(), file.getContentType());
 
             // 4. Generate & upload web-optimized versions

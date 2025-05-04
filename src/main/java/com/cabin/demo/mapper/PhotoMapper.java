@@ -38,7 +38,7 @@ public interface PhotoMapper {
         if (objectKey == null) {
             return null;
         }
-        return String.format("%s/%s", Environment.getString("S3_BASE_URL"), objectKey);
+        return String.format("%s/%s", Environment.getString("R2_BASE_URL"), objectKey);
     }
 
     @Named("photoWebUrlVersionMapping")
