@@ -23,24 +23,28 @@ public class FileNameEncoder {
     private static final int TARGET_LENGTH = 20;
 
     public static String encode(String fileName) {
-        // 1) split base + extension
-        int dot = fileName.lastIndexOf('.');
-        String base = dot > 0 ? fileName.substring(0, dot) : fileName;
-        String ext  = dot > 0 ? fileName.substring(dot)    : "";
+        try {
+            // 1) split base + extension
+            int dot = fileName.lastIndexOf('.');
+            String base = dot > 0 ? fileName.substring(0, dot) : fileName;
+            String ext  = dot > 0 ? fileName.substring(dot)    : "";
 
-        // 2) HMAC-SHA256 of basename
-        byte[] hmac = hmacSha256(base.getBytes(StandardCharsets.UTF_8));
+            // 2) HMAC-SHA256 of basename
+            byte[] hmac = hmacSha256(base.getBytes(StandardCharsets.UTF_8));
 
-        // 3) Base62-encode full HMAC bytes
-        String full62 = encodeBase62(hmac);
+            // 3) Base62-encode full HMAC bytes
+            String full62 = encodeBase62(hmac);
 
-        // 4) Trim or pad to TARGET_LENGTH
-        String short62 = full62.length() > TARGET_LENGTH
-                ? full62.substring(0, TARGET_LENGTH)
-                : padRight(full62, TARGET_LENGTH, '0');
+            // 4) Trim or pad to TARGET_LENGTH
+            String short62 = full62.length() > TARGET_LENGTH
+                    ? full62.substring(0, TARGET_LENGTH)
+                    : padRight(full62, TARGET_LENGTH, '0');
+            // 5) reattach extension
+            return short62 + ext;
 
-        // 5) reattach extension
-        return short62 + ext;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static byte[] hmacSha256(byte[] data) {

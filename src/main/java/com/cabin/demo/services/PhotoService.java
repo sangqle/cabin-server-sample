@@ -6,6 +6,7 @@ import com.cabin.demo.dto.PhotoDto;
 import com.cabin.demo.entity.auth.User;
 import com.cabin.demo.entity.photo.Photo;
 import com.cabin.demo.entity.photo.PhotoExif;
+import com.cabin.demo.helper.MinioHelper;
 import com.cabin.demo.helper.R2Helper;
 import com.cabin.demo.helper.R2PresignUtil;
 import com.cabin.demo.mapper.PhotoMapper;
@@ -32,6 +33,8 @@ public class PhotoService {
     private final PhotoDao photoDao = new PhotoDao(HibernateUtil.getSessionFactory());
     private static final String S3_BUCKET = Environment.getString("S3_BUCKET");
     R2Helper r2Helper = R2Helper.getInstance();
+
+    MinioHelper minioHelper = new MinioHelper("http://localhost:9000", Environment.getString("MINIO_ACCESS_KEY"), Environment.getString("MINIO_SECRET_KEY"));
 
     R2PresignUtil r2PresignUtil = new R2PresignUtil(
             Environment.getString("S3_ACCOUNT_ID"),
@@ -108,7 +111,8 @@ public class PhotoService {
             );
 
             // 3. Upload raw file
-            r2Helper.uploadPhoto(S3_BUCKET, rawKey, content);
+            String s = minioHelper.uploadPhoto(S3_BUCKET, rawKey, content);
+            System.err.println("save to minio: " + s);
 //            http.uploadRaw(content, rawKey, file.getFileName(), file.getContentType());
 
             // 4. Generate & upload web-optimized versions
@@ -121,8 +125,8 @@ public class PhotoService {
                         size
                 );
 //                r2Helper.uploadPhoto(S3_BUCKET, webKey, resized);
-                String s = http.uploadAndConvert(content, webKey, size);
-                System.err.println("rs: " + s);
+//                String s = http.uploadAndConvert(content, webKey, size);
+//                System.err.println("rs: " + s);
                 uploadedKeys.add(webKey);
                 webKeys.put(size, webKey);
             }
