@@ -37,6 +37,18 @@ services:
     networks:
       - internal
 
+  rabbitmq:
+    image: "${RABBITMQ_IMAGE}"
+    container_name: cabin-rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+    ports:
+      - "${RABBITMQ_PORT}:5672"
+      - "${RABBITMQ_MANAGEMENT_PORT}:15672"
+    networks:
+      - internal
+
 networks:
   internal:
     external: true
