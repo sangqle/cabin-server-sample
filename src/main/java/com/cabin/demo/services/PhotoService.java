@@ -9,13 +9,13 @@ import com.cabin.demo.entity.photo.PhotoExif;
 import com.cabin.demo.helper.MinioHelper;
 import com.cabin.demo.helper.R2Helper;
 import com.cabin.demo.helper.R2PresignUtil;
+import com.cabin.demo.locator.ServiceLocator;
 import com.cabin.demo.mapper.PhotoMapper;
 import com.cabin.demo.util.ExifData;
 import com.cabin.demo.util.ExifUtil;
 import com.cabin.demo.util.HttpUtil;
 import com.cabin.demo.util.id.IdObfuscator;
 import com.cabin.demo.util.photo.FileNameEncoder;
-import com.cabin.demo.util.photo.ImageUtils;
 import com.cabin.express.config.Environment;
 import com.cabin.express.http.UploadedFile;
 import com.google.gson.Gson;
@@ -32,9 +32,9 @@ public class PhotoService {
     private static final Logger log = LoggerFactory.getLogger(PhotoService.class);
     private final PhotoDao photoDao = new PhotoDao(HibernateUtil.getSessionFactory());
     private static final String S3_BUCKET = Environment.getString("S3_BUCKET");
-    R2Helper r2Helper = R2Helper.getInstance();
+    R2Helper r2Helper = ServiceLocator.get(R2Helper.class);
 
-    MinioHelper minioHelper = new MinioHelper("http://localhost:9000", Environment.getString("MINIO_ACCESS_KEY"), Environment.getString("MINIO_SECRET_KEY"));
+    MinioHelper minioHelper = ServiceLocator.get(MinioHelper.class);
 
     R2PresignUtil r2PresignUtil = new R2PresignUtil(
             Environment.getString("S3_ACCOUNT_ID"),

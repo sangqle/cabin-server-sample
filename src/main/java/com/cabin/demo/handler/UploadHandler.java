@@ -3,8 +3,6 @@ package com.cabin.demo.handler;
 import com.cabin.demo.dto.ApiResponse;
 import com.cabin.demo.entity.auth.User;
 import com.cabin.demo.exception.GlobalExceptionHandler;
-import com.cabin.demo.helper.R2Helper;
-import com.cabin.demo.helper.R2PresignUtil;
 import com.cabin.demo.services.PhotoService;
 import com.cabin.demo.services.UserService;
 import com.cabin.express.config.Environment;
@@ -32,7 +30,6 @@ public class UploadHandler {
                 return;
             }
             User user = userService.getUserById(1L); // Example user ID
-            R2Helper r2Helper = R2Helper.getInstance();
             for (UploadedFile file : files) {
                 System.err.println("File Name: " + file.getFileName());
                 PhotoService.INSTANCE.savePhoto(user, file);

@@ -1,5 +1,6 @@
 package com.cabin.demo.helper;
 
+import com.cabin.demo.config.AppConfig;
 import com.cabin.express.config.Environment;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
@@ -17,31 +18,25 @@ public class R2Helper {
 
     private static R2Helper instance;
 
-    private R2Helper(String accountId, String accessKey, String secretKey) {
-        // ★ Credentials
-        AwsBasicCredentials creds = AwsBasicCredentials.create(accessKey, secretKey);
-        StaticCredentialsProvider provider = StaticCredentialsProvider.create(creds);
+    private R2Helper() {
+        String accountId = Environment.getString("S3_ACCOUNT_ID");
+        String accessKey = Environment.getString("S3_ACCESS_KEY");
+        String secretKey = Environment.getString("S3_SECRET_KEY");
 
-        // ★ R2 endpoint & path-style
         String endpoint = String.format("https://%s.r2.cloudflarestorage.com", accountId);
-        S3Configuration svcConfig = S3Configuration.builder()
-                .pathStyleAccessEnabled(true)
+
+        AwsBasicCredentials creds = AwsBasicCredentials.create(accessKey, secretKey);
+
+        this.s3 = S3Client.builder()
+                .endpointOverride(URI.create(endpoint))
+                .credentialsProvider(StaticCredentialsProvider.create(creds))
+                .region(Region.of("auto"))
+                .serviceConfiguration(
+                        S3Configuration.builder()
+                                .pathStyleAccessEnabled(true)
+                                .build()
+                )
                 .build();
-
-        this.s3 = S3Client.builder().endpointOverride(URI.create(endpoint)).credentialsProvider(provider).region(Region.of("auto")).serviceConfiguration(svcConfig).build();
-    }
-
-    public static R2Helper getInstance() {
-        if (instance == null) {
-            String S3_ACCESS_KEY = Environment.getString("S3_ACCESS_KEY", "");
-            String S3_SECRET_KEY = Environment.getString("S3_SECRET_KEY", "");
-            String S3_ACCOUNT_ID = Environment.getString("S3_ACCOUNT_ID", "");
-            if (S3_ACCESS_KEY.isEmpty() || S3_SECRET_KEY.isEmpty() || S3_ACCOUNT_ID.isEmpty()) {
-                throw new RuntimeException("R2 credentials are not set in the environment variables.");
-            }
-            instance = new R2Helper(S3_ACCOUNT_ID, S3_ACCESS_KEY, S3_SECRET_KEY);
-        }
-        return instance;
     }
 
     /**

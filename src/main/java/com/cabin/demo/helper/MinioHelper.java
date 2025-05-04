@@ -1,5 +1,6 @@
 package com.cabin.demo.helper;
 
+import com.cabin.demo.config.MinIOConfig;
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
@@ -15,12 +16,16 @@ public class MinioHelper {
     private final MinioClient client;
     private final String endpoint;
 
+    public MinioHelper(MinIOConfig minIOConfig) {
+        this(minIOConfig.getEndpoint(), minIOConfig.getAccessKey(), minIOConfig.getSecretKey());
+    }
+
     /**
      * @param endpoint  Your MinIO S3-compatible endpoint, e.g. "https://minio.local:9000"
      * @param accessKey MinIO access key
      * @param secretKey MinIO secret key
      */
-    public MinioHelper(String endpoint, String accessKey, String secretKey) {
+    private MinioHelper(String endpoint, String accessKey, String secretKey) {
         this.endpoint = endpoint.endsWith("/") ? endpoint.substring(0, endpoint.length() - 1) : endpoint;
         this.client = MinioClient.builder().endpoint(this.endpoint).credentials(accessKey, secretKey).build();
     }
