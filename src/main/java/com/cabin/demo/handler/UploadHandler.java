@@ -9,33 +9,48 @@ import com.cabin.express.config.Environment;
 import com.cabin.express.http.Request;
 import com.cabin.express.http.Response;
 import com.cabin.express.http.UploadedFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
 
 
 public class UploadHandler {
+    private static final Logger LOGGER = LoggerFactory.getLogger(UploadHandler.class);
 
     private static final UserService userService = UserService.INSTANCE;
 
+    private static void sendErrorResponse(Response resp, int statusCode, String message) throws IOException {
+        resp.setStatusCode(statusCode);
+        ApiResponse<String> response = ApiResponse.error(message);
+        resp.writeBody(response);
+    }
+
+    private static void sendSuccessResponse(Response resp, String message) throws IOException {
+        ApiResponse<String> response = ApiResponse.success(message);
+        resp.writeBody(response);
+    }
+
     public static void uploadPhoto(Request req, Response resp) {
         try {
-            ApiResponse<String> response;
             List<UploadedFile> files = req.getUploadedFile("files");
 
             if (files == null || files.isEmpty()) {
-                resp.setStatusCode(400);
-                response = ApiResponse.error("No files uploaded");
-                resp.writeBody(response);
+                sendErrorResponse(resp, 400, "No files uploaded");
                 return;
             }
+
             User user = userService.getUserById(1L); // Example user ID
             for (UploadedFile file : files) {
-                System.err.println("File Name: " + file.getFileName());
-                PhotoService.INSTANCE.savePhoto(user, file);
+                long photoId = PhotoService.INSTANCE.savePhoto(user, file);
+                if (photoId < 0) {
+                    LOGGER.error(String.format("Failed to save photo for user %s", user.getId()));
+                }
             }
-            response = ApiResponse.success("Files uploaded successfully");
-            resp.writeBody(response);
+
+            sendSuccessResponse(resp, "Files uploaded successfully");
         } catch (Exception e) {
             GlobalExceptionHandler.handleException(e, resp);
         } finally {

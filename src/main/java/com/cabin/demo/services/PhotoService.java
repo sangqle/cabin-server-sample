@@ -31,7 +31,7 @@ import java.util.*;
 public class PhotoService {
     private static final Logger log = LoggerFactory.getLogger(PhotoService.class);
     private final PhotoDao photoDao = new PhotoDao(HibernateUtil.getSessionFactory());
-    private static final String S3_BUCKET = Environment.getString("R2_BUCKET");
+    private static final String R2_BUCKET = Environment.getString("R2_BUCKET");
 
     MinioHelper minioHelper = ServiceLocator.get(MinioHelper.class);
     R2Helper r2Helper = ServiceLocator.get(R2Helper.class);
@@ -111,43 +111,23 @@ public class PhotoService {
             );
 
             // 3. Upload raw file
-            String s = r2Helper.uploadPhoto(S3_BUCKET, rawKey, content);
-            System.err.println("save to r2Helper: " + s);
-//            http.uploadRaw(content, rawKey, file.getFileName(), file.getContentType());
-
-            // 4. Generate & upload web-optimized versions
-            Map<String, String> webKeys = new HashMap<>();
-            for (String size : List.of("original", "medium")) {
-                String webKey = String.format(
-                        "photos/%s/%s/web/%s.jpg",
-                        userEncId,
-                        photoEncId,
-                        size
-                );
-//                r2Helper.uploadPhoto(S3_BUCKET, webKey, resized);
-//                String s = http.uploadAndConvert(content, webKey, size);
-//                System.err.println("rs: " + s);
-                uploadedKeys.add(webKey);
-                webKeys.put(size, webKey);
+            int rs = r2Helper.uploadPhoto(R2_BUCKET, rawKey, content);
+            if (rs < 0) {
+                throw new Exception("Failed to upload raw file");
             }
 
             // 5. Update entity with keys and commit
             photo.setRawKey(rawKey);
-            photo.setWebKeys(webKeys);
             session.merge(photo);
 
             transaction.commit();
             photoId = photo.getId();
         } catch (Exception ex) {
             log.error("Error saving photo: {}", ex.getMessage());
-
-//            // 6. Compensation: delete any uploaded objects to avoid orphans
-//            if (rawKey != null) {
-//                r2Helper.deleteObject("openext-photo", rawKey);
-//            }
-//            for (String key : uploadedKeys) {
-//                r2Helper.deleteObject("openext-photo", key);
-//            }
+            // 6. Compensation: delete any uploaded objects to avoid orphans
+            if (rawKey != null) {
+                r2Helper.deleteObject(R2_BUCKET, rawKey);
+            }
             return -1;
         }
         return photoId;

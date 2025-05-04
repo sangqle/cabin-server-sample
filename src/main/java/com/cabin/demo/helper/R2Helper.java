@@ -8,20 +8,19 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.S3Configuration;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 import software.amazon.awssdk.services.s3.model.S3Exception;
 
 import java.net.URI;
 
 public class R2Helper {
     private final S3Client s3;
-    R2Config r2Config;
 
-    public R2Helper(R2Config config) {
-        this.r2Config = config;
+    public R2Helper(R2Config r2Config) {
 
-        String endpoint = String.format("https://%s.r2.cloudflarestorage.com", this.r2Config.getAccountId());
+        String endpoint = String.format("https://%s.r2.cloudflarestorage.com", r2Config.getAccountId());
 
-        AwsBasicCredentials creds = AwsBasicCredentials.create(this.r2Config.getAccessKey(), this.r2Config.getSecretKey());
+        AwsBasicCredentials creds = AwsBasicCredentials.create(r2Config.getAccessKey(), r2Config.getSecretKey());
 
         this.s3 = S3Client.builder()
                 .endpointOverride(URI.create(endpoint))
@@ -54,28 +53,50 @@ public class R2Helper {
     /**
      * Uploads the given file to the specified R2 bucket under the given object key.
      */
-    public String uploadPhoto(String bucketName, String objectKey, byte[] data) {
+    public int uploadPhoto(String bucketName, String objectKey, byte[] data) {
         try {
-            // Allow all image content types
-            String[] allowedContentTypes = {"image/jpeg", "image/png", "image/gif", "image/webp", "image/svg+xml"};
-            String contentType = "image/jpeg"; // Default content type
-            for (String type : allowedContentTypes) {
-                if (objectKey.endsWith(type)) {
-                    contentType = type;
-                    break;
-                }
+            // 1. Determine content type by file extension
+            String contentType = "application/octet-stream";
+            String lowerKey = objectKey.toLowerCase();
+            if (lowerKey.endsWith(".jpg") || lowerKey.endsWith(".jpeg")) {
+                contentType = "image/jpeg";
+            } else if (lowerKey.endsWith(".png")) {
+                contentType = "image/png";
+            } else if (lowerKey.endsWith(".gif")) {
+                contentType = "image/gif";
+            } else if (lowerKey.endsWith(".webp")) {
+                contentType = "image/webp";
+            } else if (lowerKey.endsWith(".svg")) {
+                contentType = "image/svg+xml";
             }
-            // Set the content type in the request
+
+            // 2. Build the PutObjectRequest
             PutObjectRequest request = PutObjectRequest.builder()
                     .bucket(bucketName)
                     .key(objectKey)
                     .contentType(contentType)
                     .build();
-            // Upload the object
-            s3.putObject(request, RequestBody.fromBytes(data));
-            return String.format("%s/%s", r2Config.getBaseUrl(), objectKey);
+
+            // 3. Upload the object
+            PutObjectResponse putResp = s3.putObject(
+                    request,
+                    RequestBody.fromBytes(data)
+            );
+
+            // 4. Check HTTP status via sdkHttpResponse().isSuccessful()
+            if (putResp.sdkHttpResponse().isSuccessful()) {
+                System.err.println("Upload succeeded, ETag: " + putResp.eTag());
+                return 1;   // positive value indicates success
+            } else {
+                System.err.println("Upload failed, HTTP status: " +
+                        putResp.sdkHttpResponse().statusCode());
+                return 0;
+            }
         } catch (S3Exception e) {
-            throw new RuntimeException("Failed to upload object to R2: " + e.awsErrorDetails().errorMessage(), e);
+            // 5. Handle SDK-level errors (network, auth, etc.)
+            System.err.println("Failed to upload object to R2: " +
+                    e.awsErrorDetails().errorMessage());
+            return 0;
         }
     }
 
