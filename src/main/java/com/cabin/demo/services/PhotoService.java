@@ -157,6 +157,7 @@ public class PhotoService {
         return photoId;
     }
 
+    // Refactor this method to check all keys in the map are not null
     public void syncPhotoVariants(long photoId, String jsonResponse) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
@@ -166,7 +167,6 @@ public class PhotoService {
             Photo photo = session.get(Photo.class, photoId);
             JsonObject jsonObject = new Gson().fromJson(jsonResponse, JsonObject.class);
             String originalKey = jsonObject.get("originalKey").getAsString();
-            String webKey = jsonObject.get("webKey").getAsString();
             String thumbnailKey = jsonObject.get("thumbKey").getAsString();
             String medium = jsonObject.get("mediumKey").getAsString();
 
@@ -177,7 +177,6 @@ public class PhotoService {
             }
 
             Map<String, String> webKeys = new HashMap<>();
-            webKeys.put("web", webKey);
             webKeys.put("thumb", thumbnailKey);
             webKeys.put("medium", medium);
             webKeys.put("original", originalKey);
