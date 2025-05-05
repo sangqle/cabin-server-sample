@@ -1,20 +1,26 @@
 package com.cabin.demo.services;
 
+import com.cabin.demo.dao.UserAuthDao;
 import com.cabin.demo.dao.UserDao;
 import com.cabin.demo.datasource.HibernateUtil;
+import com.cabin.demo.dto.UserDto;
+import com.cabin.demo.dto.client.request.UserLoginRequest;
 import com.cabin.demo.dto.client.request.UserRequestDTO;
 import com.cabin.demo.entity.auth.AuthProvider;
 import com.cabin.demo.entity.auth.User;
 import com.cabin.demo.entity.auth.UserAuth;
+import com.cabin.demo.mapper.UserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static org.mindrot.jbcrypt.BCrypt.gensalt;
 import static org.mindrot.jbcrypt.BCrypt.hashpw;
+import static org.mindrot.jbcrypt.BCrypt.checkpw;
 
 public class UserService {
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
     private final UserDao userDao = new UserDao(HibernateUtil.getSessionFactory());
+    private final UserAuthDao userAuthDao = new UserAuthDao(HibernateUtil.getSessionFactory());
 
     private UserService() {
     }
@@ -49,6 +55,24 @@ public class UserService {
 
         log.info("User registered successfully: {}", user.getEmail());
         return 1;
+    }
+
+    public UserDto login(UserLoginRequest userDto) {
+        // Find user by email
+        UserAuth userAuth = userAuthDao.findByProviderAndProviderId(AuthProvider.LOCAL, userDto.getEmail());
+        if (userAuth == null) {
+            log.warn("Login failed: User not found: {}", userDto.getEmail());
+            throw new IllegalArgumentException("User not found");
+        }
+
+        // check password
+        if (!checkpw(userDto.getPassword(),  userAuth.getPasswordHash())) {
+            log.warn("Login failed: Incorrect password for user: {}", userDto.getEmail());
+            throw new IllegalArgumentException("Incorrect password");
+        }
+
+        // Create UserDto
+        return UserMapper.INSTANCE.toDto(userAuth.getUser());
     }
 
     /**

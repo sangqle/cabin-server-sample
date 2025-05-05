@@ -23,6 +23,8 @@ public class UserRouter {
 
         router.post("/users", UserHandler::register);
 
+        router.post("/users/login", UserHandler::login);
+
         router.put("/users/:id", (req, res) -> {
             res.send();
         });
