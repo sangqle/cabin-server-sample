@@ -21,7 +21,7 @@ public class UserRouter {
 
         router.get("/users", UserHandler::getAllUsers);
 
-        router.post("/users", UserHandler::addUser);
+        router.post("/users", UserHandler::register);
 
         router.put("/users/:id", (req, res) -> {
             res.send();

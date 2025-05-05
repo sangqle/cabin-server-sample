@@ -18,7 +18,7 @@ import java.util.List;
 
 
 public class UploadHandler {
-    private static final Logger LOGGER = LoggerFactory.getLogger(UploadHandler.class);
+    private static final Logger _logger = LoggerFactory.getLogger(UploadHandler.class);
 
     private static final UserService userService = UserService.INSTANCE;
 
@@ -46,7 +46,7 @@ public class UploadHandler {
             for (UploadedFile file : files) {
                 long photoId = PhotoService.INSTANCE.savePhoto(user, file);
                 if (photoId < 0) {
-                    LOGGER.error(String.format("Failed to save photo for user %s", user.getId()));
+                    _logger.error(String.format("Failed to save photo for user %s", user.getId()));
                 }
             }
 

@@ -52,6 +52,8 @@ dependencies {
     implementation("io.minio:minio:8.5.17")
 
     implementation("com.rabbitmq:amqp-client:5.20.0")
+
+    implementation 'org.mindrot:jbcrypt:0.4'
 }
 
 test {
