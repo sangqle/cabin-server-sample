@@ -22,6 +22,7 @@ import com.cabin.express.http.UploadedFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.slf4j.Logger;
@@ -55,6 +56,7 @@ public class PhotoService {
     }
 
     public static final PhotoService INSTANCE;
+
     static {
         try {
             INSTANCE = new PhotoService();
@@ -141,14 +143,8 @@ public class PhotoService {
             long finalPhotoId = photoId;
             reply.thenAccept(responseJson -> {
                 // Parse JSON, update DB with webKey
-                String webKey = null;
-                try {
-                    webKey = new ObjectMapper().readTree(responseJson).get("webKey").asText();
-                    System.err.println("webKey: " + webKey);
-                } catch (JsonProcessingException e) {
-                    throw new RuntimeException(e);
-                }
-                markWebKeyReady(finalPhotoId, webKey);
+                System.err.println("Received reply: " + responseJson);
+                syncPhotoVariants(finalPhotoId, responseJson);
             });
         } catch (Exception ex) {
             log.error("Error saving photo: {}", ex.getMessage());
@@ -159,6 +155,44 @@ public class PhotoService {
             return -1;
         }
         return photoId;
+    }
+
+    public void syncPhotoVariants(long photoId, String jsonResponse) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
+        try {
+
+            transaction = session.beginTransaction();
+            Photo photo = session.get(Photo.class, photoId);
+            JsonObject jsonObject = new Gson().fromJson(jsonResponse, JsonObject.class);
+            String originalKey = jsonObject.get("originalKey").getAsString();
+            String webKey = jsonObject.get("webKey").getAsString();
+            String thumbnailKey = jsonObject.get("thumbKey").getAsString();
+            String medium = jsonObject.get("mediumKey").getAsString();
+
+            // Put all keys into a map
+            if (photo == null) {
+                log.error("Photo not found with ID: {}", photoId);
+                return;
+            }
+
+            Map<String, String> webKeys = new HashMap<>();
+            webKeys.put("web", webKey);
+            webKeys.put("thumb", thumbnailKey);
+            webKeys.put("medium", medium);
+            webKeys.put("original", originalKey);
+            photo.setWebKeys(webKeys);
+            session.merge(photo);
+
+            transaction.commit();
+        } catch (Exception ex) {
+            log.error("Error syncing photo variants: {}", ex.getMessage());
+            if (transaction != null) {
+                transaction.rollback();
+            }
+        } finally {
+            session.close();
+        }
     }
 
     public void markWebKeyReady(long photoId, String webKey) {
