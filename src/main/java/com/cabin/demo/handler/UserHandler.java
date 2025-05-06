@@ -1,6 +1,5 @@
 package com.cabin.demo.handler;
 
-import com.cabin.demo.dto.ApiResponse;
 import com.cabin.demo.dto.UserDto;
 import com.cabin.demo.dto.client.request.UserLoginRequest;
 import com.cabin.demo.dto.client.request.UserRequestDTO;
@@ -11,18 +10,9 @@ import com.cabin.express.http.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-
-
-public class UserHandler {
+public class UserHandler extends BaseHandler {
 
     private static final Logger _logger = LoggerFactory.getLogger(UserHandler.class);
-
-    private static void sendSuccessResponse(Response resp, Object data) throws IOException {
-        ApiResponse<Object> success = ApiResponse.success(data);
-        resp.writeBody(success);
-        resp.send();
-    }
 
     public static void getAllUsers(Request req, Response resp) {
         try {
@@ -71,21 +61,16 @@ public class UserHandler {
         try {
             UserLoginRequest userLoginRequest = req.getBodyAs(UserLoginRequest.class);
             if (userLoginRequest == null || userLoginRequest.getEmail() == null || userLoginRequest.getPassword() == null) {
-                resp.setStatusCode(400);
-                resp.writeBody("Invalid request body");
-                return;
+                sendErrorResponse(resp, 400, "Invalid request body");
             }
-            // Call the service to login the user
             UserDto login = UserService.INSTANCE.login(userLoginRequest);
             if (login != null) {
                 sendSuccessResponse(resp, login);
             } else {
-                resp.setStatusCode(401);
-                resp.writeBody("Invalid email or password");
+                sendErrorResponse(resp, 401, "Invalid email or password");
             }
         } catch (Exception e) {
             _logger.error("Error while logging in: {}", e.getMessage());
-            GlobalExceptionHandler.handleException(e, resp);
         } finally {
             resp.send();
         }

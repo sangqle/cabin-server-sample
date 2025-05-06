@@ -62,13 +62,13 @@ public class UserService {
         UserAuth userAuth = userAuthDao.findByProviderAndProviderId(AuthProvider.LOCAL, userDto.getEmail());
         if (userAuth == null) {
             log.warn("Login failed: User not found: {}", userDto.getEmail());
-            throw new IllegalArgumentException("User not found");
+            return null;
         }
 
         // check password
         if (!checkpw(userDto.getPassword(),  userAuth.getPasswordHash())) {
             log.warn("Login failed: Incorrect password for user: {}", userDto.getEmail());
-            throw new IllegalArgumentException("Incorrect password");
+            return null;
         }
 
         // Create UserDto
