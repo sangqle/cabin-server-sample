@@ -3,6 +3,7 @@ package com.cabin.demo.handler;
 import com.cabin.demo.dto.UserDto;
 import com.cabin.demo.dto.client.request.UserLoginRequest;
 import com.cabin.demo.dto.client.request.UserRequestDTO;
+import com.cabin.demo.dto.client.response.UserLoginResponseDto;
 import com.cabin.demo.exception.GlobalExceptionHandler;
 import com.cabin.demo.services.UserService;
 import com.cabin.express.http.Request;
@@ -63,7 +64,7 @@ public class UserHandler extends BaseHandler {
             if (userLoginRequest == null || userLoginRequest.getEmail() == null || userLoginRequest.getPassword() == null) {
                 sendErrorResponse(resp, 400, "Invalid request body");
             }
-            UserDto login = UserService.INSTANCE.login(userLoginRequest);
+            UserLoginResponseDto login = UserService.INSTANCE.login(userLoginRequest);
             if (login != null) {
                 sendSuccessResponse(resp, login);
             } else {

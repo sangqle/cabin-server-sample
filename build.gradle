@@ -54,6 +54,13 @@ dependencies {
     implementation("com.rabbitmq:amqp-client:5.20.0")
 
     implementation 'org.mindrot:jbcrypt:0.4'
+
+    // JWT
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+    // 2) The implementation (pulled in at runtime)
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
+    // 3) JSON processor: Jackson (or switch to jjwt-gson)
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
 }
 
 test {

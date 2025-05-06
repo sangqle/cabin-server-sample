@@ -3,13 +3,14 @@ package com.cabin.demo.services;
 import com.cabin.demo.dao.UserAuthDao;
 import com.cabin.demo.dao.UserDao;
 import com.cabin.demo.datasource.HibernateUtil;
-import com.cabin.demo.dto.UserDto;
 import com.cabin.demo.dto.client.request.UserLoginRequest;
 import com.cabin.demo.dto.client.request.UserRequestDTO;
+import com.cabin.demo.dto.client.response.UserLoginResponseDto;
 import com.cabin.demo.entity.auth.AuthProvider;
 import com.cabin.demo.entity.auth.User;
 import com.cabin.demo.entity.auth.UserAuth;
-import com.cabin.demo.mapper.UserMapper;
+import com.cabin.demo.util.JwtUtil;
+import com.cabin.demo.util.id.IdObfuscator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,22 +58,23 @@ public class UserService {
         return 1;
     }
 
-    public UserDto login(UserLoginRequest userDto) {
-        // Find user by email
+    public UserLoginResponseDto login(UserLoginRequest userDto) {
         UserAuth userAuth = userAuthDao.findByProviderAndProviderId(AuthProvider.LOCAL, userDto.getEmail());
         if (userAuth == null) {
             log.warn("Login failed: User not found: {}", userDto.getEmail());
             return null;
         }
 
-        // check password
         if (!checkpw(userDto.getPassword(),  userAuth.getPasswordHash())) {
             log.warn("Login failed: Incorrect password for user: {}", userDto.getEmail());
             return null;
         }
 
-        // Create UserDto
-        return UserMapper.INSTANCE.toDto(userAuth.getUser());
+        UserLoginResponseDto userLoginResponseDto = new UserLoginResponseDto();
+        String noiseUserId = IdObfuscator.encodeUserId(userAuth.getUser().getId());
+
+        userLoginResponseDto.setAccessToken(JwtUtil.generateToken(noiseUserId, userAuth.getUser().getEmail()));
+        return userLoginResponseDto;
     }
 
     /**
