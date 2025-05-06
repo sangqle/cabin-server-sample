@@ -1,10 +1,12 @@
 package com.cabin.demo.server;
 
+import com.cabin.demo.middleware.JwtAuthMiddleware;
 import com.cabin.demo.middleware.Middleware;
 import com.cabin.demo.router.PhotoRouter;
 import com.cabin.demo.router.UploadRouter;
 import com.cabin.demo.router.UserRouter;
 import com.cabin.express.config.Environment;
+import com.cabin.express.router.Router;
 import com.cabin.express.server.CabinServer;
 import com.cabin.express.server.ServerBuilder;
 
@@ -18,9 +20,16 @@ public class HServer {
                     .build();
 
             // Setup routes
-            server.use(UploadRouter.getRouter());
-            server.use(UserRouter.getRouter());
-            server.use(PhotoRouter.getRouter());
+            Router userRouter = UserRouter.getRouter();
+            Router photoRouter = PhotoRouter.getRouter();
+            Router uploadRouter = UploadRouter.getRouter();
+
+            photoRouter.use(JwtAuthMiddleware::authenticate);
+            uploadRouter.use(JwtAuthMiddleware::authenticate);
+
+            server.use(userRouter);
+            server.use(photoRouter);
+            server.use(uploadRouter);
 
             server.use(Middleware::logRequest);
 

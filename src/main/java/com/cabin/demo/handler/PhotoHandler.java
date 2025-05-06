@@ -1,6 +1,7 @@
 package com.cabin.demo.handler;
 
 import com.cabin.demo.dto.ApiResponse;
+import com.cabin.demo.dto.AuthenticatedUser;
 import com.cabin.demo.dto.PhotoDto;
 import com.cabin.demo.exception.GlobalExceptionHandler;
 import com.cabin.demo.services.PhotoService;
@@ -27,6 +28,9 @@ public class PhotoHandler {
 
     public static void getPosts(Request req, Response resp) {
         try {
+            AuthenticatedUser  user = req.getAttribute(AuthenticatedUser.class);
+            System.err.println("Authenticated user: " + user.getEmail());
+
             int offset = Integer.parseInt(req.getQueryParam("offset"));
             int limit = Integer.parseInt(req.getQueryParam("limit"));
             String userId = req.getPathParam("userId");

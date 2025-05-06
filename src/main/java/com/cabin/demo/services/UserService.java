@@ -71,9 +71,8 @@ public class UserService {
         }
 
         UserLoginResponseDto userLoginResponseDto = new UserLoginResponseDto();
-        String noiseUserId = IdObfuscator.encodeUserId(userAuth.getUser().getId());
 
-        userLoginResponseDto.setAccessToken(JwtUtil.generateToken(noiseUserId, userAuth.getUser().getEmail()));
+        userLoginResponseDto.setAccessToken(JwtUtil.generateToken(userAuth.getUser().getId(), userAuth.getUser().getEmail()));
         return userLoginResponseDto;
     }
 

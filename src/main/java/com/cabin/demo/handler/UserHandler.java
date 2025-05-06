@@ -61,7 +61,10 @@ public class UserHandler extends BaseHandler {
     public static void login(Request req, Response resp) {
         try {
             UserLoginRequest userLoginRequest = req.getBodyAs(UserLoginRequest.class);
-            if (userLoginRequest == null || userLoginRequest.getEmail() == null || userLoginRequest.getPassword() == null) {
+            if (userLoginRequest == null
+                    || userLoginRequest.getEmail() == null
+                    || userLoginRequest.getPassword() == null
+            ) {
                 sendErrorResponse(resp, 400, "Invalid request body");
             }
             UserLoginResponseDto login = UserService.INSTANCE.login(userLoginRequest);
