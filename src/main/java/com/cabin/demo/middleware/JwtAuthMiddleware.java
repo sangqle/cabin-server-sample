@@ -10,31 +10,35 @@ import java.io.IOException;
 
 public class JwtAuthMiddleware {
     public static void authenticate(Request req, Response res, MiddlewareChain chain) throws IOException {
+        String token = extractToken(req);
+        if (token == null) {
+            respondUnauthorized(res);
+            return;
+        }
+
+        try {
+            AuthenticatedUser authenticatedUser = JwtUtil.parseAndValidateToken(token);
+            if (authenticatedUser == null) {
+                respondUnauthorized(res);
+                return;
+            }
+            req.putAttribute(AuthenticatedUser.class, authenticatedUser);
+            chain.next(req, res);
+        } catch (Exception e) {
+            respondUnauthorized(res);
+        }
+    }
+
+    private static String extractToken(Request req) {
         String header = req.getHeader("Authorization");
         if (header != null && header.startsWith("Bearer ")) {
-            String token = header.substring(7);
-            try {
-                // Validate the token here (e.g., using a JWT library)
-                AuthenticatedUser authenticatedUser = JwtUtil.parseAndValidateToken(token);
-                // If valid, proceed to the next middleware or route handler
-                if(authenticatedUser != null) {
-                    req.putAttribute(AuthenticatedUser.class, authenticatedUser);
-                } else {
-                    // Token is invalid
-                    res.setStatusCode(401);
-                    res.send("Unauthorized");
-                    return;
-                }
-                chain.next(req, res);
-            } catch (Exception e) {
-                // Token validation failed
-                res.setStatusCode(401);
-                res.send("Unauthorized");
-            }
-        } else {
-            // No token provided
-            res.setStatusCode(401);
-            res.send("Unauthorized");
+            return header.substring(7);
         }
+        return null;
+    }
+
+    private static void respondUnauthorized(Response res) throws IOException {
+        res.setStatusCode(401);
+        res.send("Unauthorized");
     }
 }
