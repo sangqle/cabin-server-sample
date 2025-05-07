@@ -33,9 +33,8 @@ public class PhotoHandler {
 
             int offset = Integer.parseInt(req.getQueryParam("offset"));
             int limit = Integer.parseInt(req.getQueryParam("limit"));
-            String userId = req.getPathParam("userId");
             List<PhotoDto> photos =
-                    PhotoService.INSTANCE.getSlicePhotoByUserId(IdObfuscator.decodeUserId(userId), offset, limit);
+                    PhotoService.INSTANCE.getSlicePhotoByUserId(user.getUserId(), offset, limit);
             ApiResponse<List<PhotoDto>> response =
                     ApiResponse.success(photos);
 

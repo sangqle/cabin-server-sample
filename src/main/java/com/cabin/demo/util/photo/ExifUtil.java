@@ -1,4 +1,4 @@
-package com.cabin.demo.util;
+package com.cabin.demo.util.photo;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.metadata.Directory;
@@ -8,6 +8,9 @@ import com.drew.metadata.exif.ExifDirectoryBase;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.exif.GpsDirectory;
 import com.drew.lang.GeoLocation;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 
 import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
@@ -30,6 +33,9 @@ public class ExifUtil {
     private static final int TAG_DATETIME_ORIGINAL = ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL;  // 0x9003, 36867 :contentReference[oaicite:8]{index=8}
     private static final int TAG_GPS_INFO_OFFSET = ExifDirectoryBase.TAG_SUBJECT_LOCATION;      // pointer to GPS IFD :contentReference[oaicite:9]{index=9}
 
+    // Gson instance for JSON serialization
+    private static final Gson gson = new Gson();
+    
     public static ExifData getExifData(byte[] fileContent) throws Exception {
         Metadata metadata = ImageMetadataReader.readMetadata(
                 new ByteArrayInputStream(fileContent)
@@ -45,7 +51,8 @@ public class ExifUtil {
                 map.put(dir.getName() + "." + tag.getTagName(), tag.getDescription());
             }
         }
-        result.setExifMap(map);
+        result.setExifJsonTree(gson.toJsonTree(map));
+
         // 1) Iterate all tags once, dispatch by tagType
         for (Directory dir : metadata.getDirectories()) {
             for (Tag tag : dir.getTags()) {

@@ -1,6 +1,7 @@
 package com.cabin.demo.handler;
 
 import com.cabin.demo.dto.ApiResponse;
+import com.cabin.demo.dto.AuthenticatedUser;
 import com.cabin.demo.entity.auth.User;
 import com.cabin.demo.exception.GlobalExceptionHandler;
 import com.cabin.demo.services.PhotoService;
@@ -35,6 +36,8 @@ public class UploadHandler {
 
     public static void uploadPhoto(Request req, Response resp) {
         try {
+            AuthenticatedUser user = req.getAttribute(AuthenticatedUser.class);
+
             List<UploadedFile> files = req.getUploadedFile("files");
 
             if (files == null || files.isEmpty()) {
@@ -42,11 +45,16 @@ public class UploadHandler {
                 return;
             }
 
-            User user = userService.getUserById(1L); // Example user ID
+            User userById = UserService.INSTANCE.getUserById(user.getUserId());
+            if (userById == null) {
+                sendErrorResponse(resp, 404, "Invalid user");
+                return;
+            }
+
             for (UploadedFile file : files) {
-                long photoId = PhotoService.INSTANCE.savePhoto(user, file);
+                long photoId = PhotoService.INSTANCE.savePhoto(userById, file);
                 if (photoId < 0) {
-                    _logger.error(String.format("Failed to save photo for user %s", user.getId()));
+                    _logger.error(String.format("Failed to save photo for user %s", userById.getId()));
                 }
             }
 

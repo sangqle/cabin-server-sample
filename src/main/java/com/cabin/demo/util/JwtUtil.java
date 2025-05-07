@@ -1,7 +1,6 @@
 package com.cabin.demo.util;
 
 import com.cabin.demo.dto.AuthenticatedUser;
-import com.cabin.demo.services.UserService;
 import com.cabin.demo.util.id.IdObfuscator;
 import com.cabin.express.config.Environment;
 import io.jsonwebtoken.*;
@@ -11,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 import java.util.Date;
 
 public class JwtUtil {

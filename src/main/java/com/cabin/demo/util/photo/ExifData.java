@@ -1,5 +1,6 @@
-package com.cabin.demo.util;
+package com.cabin.demo.util.photo;
 
+import com.google.gson.JsonElement;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,7 +24,7 @@ public class ExifData {
     private Double longitude;
     private LocalDateTime shootingTime;
 
-    private Map<String, Object> exifMap;
+    private JsonElement exifJsonTree;
 
     @Override
     public String toString() {

@@ -11,26 +11,26 @@ import com.cabin.demo.helper.R2Helper;
 import com.cabin.demo.helper.R2PresignUtil;
 import com.cabin.demo.locator.ServiceLocator;
 import com.cabin.demo.mapper.PhotoMapper;
-import com.cabin.demo.util.ExifData;
-import com.cabin.demo.util.ExifUtil;
+import com.cabin.demo.util.photo.ExifData;
+import com.cabin.demo.util.photo.ExifUtil;
 import com.cabin.demo.util.HttpUtil;
 import com.cabin.demo.util.id.IdObfuscator;
 import com.cabin.demo.util.photo.FileNameEncoder;
 import com.cabin.demo.worker.RpcClient;
 import com.cabin.express.config.Environment;
 import com.cabin.express.http.UploadedFile;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import io.jsonwebtoken.io.IOException;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 
 
 public class PhotoService {
@@ -38,6 +38,8 @@ public class PhotoService {
     private final PhotoDao photoDao = new PhotoDao(HibernateUtil.getSessionFactory());
     private static final String R2_BUCKET = Environment.getString("R2_BUCKET");
     private final RpcClient rpcClient = new RpcClient();
+    private static final SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+
 
 
     MinioHelper minioHelper = ServiceLocator.get(MinioHelper.class);
@@ -48,8 +50,6 @@ public class PhotoService {
             Environment.getString("R2_ACCESS_KEY", ""),
             Environment.getString("R2_SECRET_KEY", "")
     );
-
-    HttpUtil http = new HttpUtil("http://localhost:8000");
 
 
     private PhotoService() throws Exception {
@@ -66,131 +66,103 @@ public class PhotoService {
     }
 
     public long savePhoto(User user, UploadedFile file) throws Exception {
-        Gson gson = new Gson();
+        // 1) extract EXIF once
+        ExifData exifData = ExifUtil.getExifData(file.getContent());
 
-        long savedPhotoId = -1;
-        String rawKey = null;
-        List<String> uploadedKeys = new ArrayList<>();
+        // 2) build and persist the Photo + PhotoExif in one transaction
+        Photo photo = createPhotoAggregate(user, file.getFileName(), file.getFileName(), exifData);
 
-        long photoId = 0;
-        byte[] content = file.getContent();
+        // 3) upload the raw bytes to R2 and store the key
+        String rawKey = uploadRawAndSetKey(photo, file.getContent());
 
-        ExifData exifData = ExifUtil.getExifData(content);
+        // 4) asynchronously request conversion & DB update
+        enqueueConversion(photo.getId(), rawKey);
 
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = null;
-
-        try {
-            transaction = session.beginTransaction();
-
-            // Save Photo
-            Photo photo = new Photo();
-            photo.setUser(user);
-            photo.setTitle(file.getFileName());
-            photo.setDescription(file.getFileName());
-            session.persist(photo);
-
-            // Force INSERT now so photo.id is generated
-            session.flush();
-            savedPhotoId = photo.getId();
-
-            // Save EXIF Data
-            PhotoExif photoExif = new PhotoExif();
-            photoExif.setPhoto(photo); // Assuming a relationship is set
-            photoExif.setExifJson(gson.toJsonTree(exifData.getExifMap()).toString());
-            photoExif.setCameraModel(exifData.getCameraModel());
-            photoExif.setLensModel(exifData.getLensModel());
-            photoExif.setFocalLength(exifData.getFocalLength());
-            photoExif.setExposureTime(exifData.getExposureTime());
-            photoExif.setFNumber(exifData.getFNumber());
-            photoExif.setIso(exifData.getIso());
-            photoExif.setFlash(exifData.getFlash());
-            photoExif.setShootingAt(exifData.getShootingTime());
-
-            // gps
-            photoExif.setLatitude(exifData.getLatitude());
-            photoExif.setLongitude(exifData.getLongitude());
-
-            session.persist(photoExif);
-
-            // 2. Build R2 object keys
-            String userEncId = IdObfuscator.encodeUserId(user.getId());
-            String photoEncId = IdObfuscator.encodePhotoId(savedPhotoId);
-
-            // Raw object key
-            rawKey = String.format(
-                    "photos/%s/%s/raw/%s",
-                    userEncId,
-                    photoEncId,
-                    FileNameEncoder.encode(file.getFileName())
-            );
-
-            // 3. Upload raw file
-            int rs = r2Helper.uploadPhoto(R2_BUCKET, rawKey, content);
-            if (rs < 0) {
-                throw new Exception("Failed to upload raw file");
-            }
-
-            // 5. Update entity with keys and commit
-            photo.setRawKey(rawKey);
-            session.merge(photo);
-
-            transaction.commit();
-            photoId = photo.getId();
-
-            // 2) Send RPC request and asynchronously handle reply
-            CompletableFuture<String> reply = rpcClient.callConvert(photoId, rawKey);
-            long finalPhotoId = photoId;
-            reply.thenAccept(responseJson -> {
-                // Parse JSON, update DB with webKey
-                System.err.println("Received reply: " + responseJson);
-                syncPhotoVariants(finalPhotoId, responseJson);
-            });
-        } catch (Exception ex) {
-            log.error("Error saving photo: {}", ex.getMessage());
-            // 6. Compensation: delete any uploaded objects to avoid orphans
-            if (rawKey != null) {
-                r2Helper.deleteObject(R2_BUCKET, rawKey);
-            }
-            return -1;
-        }
-        return photoId;
+        return photo.getId();
     }
 
-    // Refactor this method to check all keys in the map are not null
-    public void syncPhotoVariants(long photoId, String jsonResponse) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = null;
-        try {
 
-            transaction = session.beginTransaction();
-            Photo photo = session.get(Photo.class, photoId);
-            JsonObject jsonObject = new Gson().fromJson(jsonResponse, JsonObject.class);
-            String originalKey = jsonObject.get("originalKey").getAsString();
-            String thumbnailKey = jsonObject.get("thumbKey").getAsString();
-            String medium = jsonObject.get("mediumKey").getAsString();
+    private Photo createPhotoAggregate(User user, String title, String description, ExifData exif) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction tx = session.beginTransaction();
 
-            // Put all keys into a map
-            if (photo == null) {
-                log.error("Photo not found with ID: {}", photoId);
-                return;
-            }
+            Photo photo = new Photo();
+            photo.setUser(user);
+            photo.setTitle(title);
+            photo.setDescription(description);
 
-            Map<String, String> webKeys = new HashMap<>();
-            webKeys.put("thumb", thumbnailKey);
-            webKeys.put("medium", medium);
-            webKeys.put("original", originalKey);
-            photo.setWebKeys(webKeys);
+            PhotoExif photoExif = new PhotoExif();
+            photoExif.setPhoto(photo);
+            photoExif.populateFrom(exif);
+            // assume PhotoExif has a helper that sets all its fields from ExifData
+
+            photo.setPhotoExif(photoExif);
+            session.persist(photo);  // cascades both photo + exif
+            tx.commit();
+
+            return photo;
+        }
+    }
+
+
+    private String uploadRawAndSetKey(Photo photo, byte[] content) throws Exception {
+        // build a stable key
+        String userEnc  = IdObfuscator.encodeUserId(photo.getUser().getId());
+        String photoEnc = IdObfuscator.encodePhotoId(photo.getId());
+        String rawKey   = String.format("photos/%s/%s/raw/%s",
+                userEnc, photoEnc,
+                FileNameEncoder.encode(photo.getTitle()));
+
+        // upload
+        int res = r2Helper.uploadPhoto(R2_BUCKET, rawKey, content);
+        if (res < 0) {
+            throw new IOException("Failed to upload raw image to R2");
+        }
+
+        // persist the rawKey in its own transaction
+        try (Session session = sessionFactory.openSession()) {
+            Transaction tx = session.beginTransaction();
+            photo.setRawKey(rawKey);
             session.merge(photo);
+            tx.commit();
+        }
 
-            transaction.commit();
-        } catch (Exception ex) {
-            log.error("Error syncing photo variants: {}", ex.getMessage());
-            if (transaction != null) {
-                transaction.rollback();
+        return rawKey;
+    }
+
+    private void enqueueConversion(long photoId, String rawKey) throws java.io.IOException {
+        rpcClient.callConvert(photoId, rawKey)
+                .thenAccept(json -> syncPhotoVariants(photoId, json))
+                .exceptionally(ex -> {
+                    // log & decide on retry or DLQ
+                    log.error("Conversion RPC failed for {}: {}", photoId, ex.getMessage());
+                    return null;
+                });
+    }
+
+    private void syncPhotoVariants(long photoId, String json) {
+        // parse JSON into a Map<String,String> of variant keys
+        Map<String,String> variants = parseVariantKeys(json);
+
+        try (Session session = sessionFactory.openSession()) {
+            Transaction tx = session.beginTransaction();
+            Photo photo = session.get(Photo.class, photoId);
+            photo.setWebKeys(variants);
+            session.merge(photo);
+            tx.commit();
+        }
+    }
+
+    // helper to parse the converter’s JSON payload
+    private Map<String,String> parseVariantKeys(String json) {
+        List<String> keysExpected = List.of("webKey", "mediumKey", "smallKey", "thumbKey", "originalKey");
+        Gson gson = new Gson();
+        JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
+        Map<String, String> keys = new HashMap<>();
+        for (String key : keysExpected) {
+            if (jsonObject.has(key)) {
+                keys.put(key, jsonObject.get(key).getAsString());
             }
-        } finally {
-            session.close();
         }
     }
 

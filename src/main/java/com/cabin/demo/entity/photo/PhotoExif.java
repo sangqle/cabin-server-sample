@@ -1,5 +1,6 @@
 package com.cabin.demo.entity.photo;
 
+import com.cabin.demo.util.photo.ExifData;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -60,4 +61,18 @@ public class PhotoExif {
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name="exif_json", columnDefinition="jsonb")
     private String exifJson;
+
+    public void populateFrom(ExifData exif) {
+        this.shootingAt = exif.getShootingTime();
+        this.cameraModel = exif.getCameraModel();
+        this.lensModel = exif.getLensModel();
+        this.iso = exif.getIso();
+        this.exposureTime = exif.getExposureTime();
+        this.fNumber = exif.getFNumber();
+        this.focalLength = exif.getFocalLength();
+        this.flash = exif.getFlash();
+        this.longitude = exif.getLongitude();
+        this.latitude = exif.getLatitude();
+        this.exifJson = exif.getExifJsonTree().toString();
+    }
 }

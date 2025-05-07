@@ -14,6 +14,6 @@ public class PhotoRouter {
 
     public static void setupRoutes() {
         router.setPrefix(PREFIX);
-        router.get("/:userId", PhotoHandler::getPosts);
+        router.get("/", PhotoHandler::getPosts);
     }
 }
