@@ -164,6 +164,7 @@ public class PhotoService {
                 keys.put(key, jsonObject.get(key).getAsString());
             }
         }
+        return keys;
     }
 
     public void markWebKeyReady(long photoId, String webKey) {
